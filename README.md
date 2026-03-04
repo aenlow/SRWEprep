@@ -43,3 +43,4 @@ A fully offline, single-file practice exam for the **Cisco CCNA 2: Switching, Ro
 
 This project is intended for personal study use only. Question content is sourced from publicly available CCNA exam prep materials. This tool is not affiliated with or endorsed by Cisco Systems. Cisco, CCNA, and related marks are trademarks of Cisco Systems, Inc.
 All questions are pulled from https://itexamanswers.net/ccna-2-v7-0-final-exam-answers-full-switching-routing-and-wireless-essentials.html
+The website was last updated: Feb 11, 2026
