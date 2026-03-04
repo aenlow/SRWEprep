@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCNA 2 SRWE – Practice Final Exam</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+/* ── THEME VARIABLES ── */
+:root{
+  --bg-page:#0f172a;--bg-card:#ffffff;--bg-section:#f3f4f6;
+  --bg-opt:#f9fafb;--bg-opt-hover:#eff6ff;--bg-opt-sel:#eff6ff;
+  --bg-header:#ffffff;--bg-dot-un:#f3f4f6;
+  --border:#e5e7eb;--border-opt:#e5e7eb;
+  --text-main:#1f2937;--text-sub:#374151;--text-muted:#9ca3af;
+  --navy:#0f2d5e;--blue:#1a56db;--lblue:#dbeafe;
+  --green:#065f46;--lgreen:#d1fae5;--red:#991b1b;--lred:#fee2e2;
+  --yellow:#92400e;--lyellow:#fef9c3;
+  --gray50:#f9fafb;--gray100:#f3f4f6;--gray200:#e5e7eb;
+  --gray400:#9ca3af;--gray700:#374151;--gray800:#1f2937;
+  --shadow:0 1px 4px rgba(0,0,0,.08);
+  --fs-q:15px;--fs-opt:14px;
+}
+.dark{
+  --bg-page:#0d1117;--bg-card:#161b22;--bg-section:#0d1117;
+  --bg-opt:#1c2128;--bg-opt-hover:#21262d;--bg-opt-sel:#1e3a5f;
+  --bg-header:#161b22;--bg-dot-un:#21262d;
+  --border:#30363d;--border-opt:#30363d;
+  --text-main:#e6edf3;--text-sub:#c9d1d9;--text-muted:#8b949e;
+  --navy:#58a6ff;--blue:#58a6ff;--lblue:#1e3a5f;
+  --green:#3fb950;--lgreen:#0d2d1a;--red:#f85149;--lred:#2d0d0d;
+  --yellow:#fbbf24;--lyellow:#2a200a;
+  --gray50:#161b22;--gray100:#21262d;--gray200:#30363d;
+  --gray400:#8b949e;--gray700:#c9d1d9;--gray800:#e6edf3;
+  --shadow:0 1px 4px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg-page);color:var(--text-main);transition:background .2s,color .2s;}
+
+/* ── SPLASH ── */
+#splash{background:linear-gradient(135deg,#0f172a 0%,#1e3a6e 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.dark #splash{background:linear-gradient(135deg,#0d1117 0%,#0f2035 100%);}
+.splash-card{background:var(--bg-card);border-radius:20px;padding:44px 36px;max-width:520px;width:100%;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,.5);}
+.splash-card .logo{font-size:52px;margin-bottom:14px;}
+.splash-card h1{font-size:26px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.splash-card .sub{color:var(--text-muted);font-size:13px;margin-bottom:20px;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;}
+.stat-box{background:var(--bg-opt);border:1px solid var(--border);border-radius:10px;padding:12px 6px;}
+.stat-box .num{font-size:24px;font-weight:800;color:var(--navy);}
+.stat-box .lbl{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.mode-toggle{display:flex;background:var(--bg-opt);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;}
+.mode-btn{flex:1;padding:12px 8px;border:none;background:transparent;cursor:pointer;font-size:13px;font-weight:600;color:var(--text-muted);transition:.15s;}
+.mode-btn.active{background:var(--blue);color:#fff;}
+.mode-desc{font-size:12px;color:var(--text-muted);margin-bottom:20px;min-height:34px;line-height:1.55;padding:0 4px;}
+.topic-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px;}
+.pill{background:var(--lblue);color:var(--blue);border-radius:20px;padding:4px 11px;font-size:12px;font-weight:600;}
+.btn-start{width:100%;background:var(--blue);color:white;border:none;padding:15px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;transition:background .15s,transform .1s;}
+.btn-start:hover{background:#1447b9;}
+.btn-start:active{transform:scale(.98);}
+
+/* ── STICKY HEADER ── */
+#test-section{background:var(--bg-section);padding:0 0 40px;}
+#test-section.hidden{display:none;}
+.test-sticky-header{
+  position:sticky;top:0;z-index:50;
+  background:var(--bg-header);border-bottom:2px solid var(--border);
+  padding:13px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.qcount{font-weight:800;color:var(--navy);font-size:15px;white-space:nowrap;min-width:80px;}
+.prog-bar{flex:1;min-width:60px;background:var(--gray100);border-radius:99px;height:9px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#3b82f6,#1d4ed8);border-radius:99px;transition:width .3s;}
+.answered-count{font-size:13px;color:var(--text-muted);white-space:nowrap;font-weight:500;}
+
+/* timer */
+.timer-display{
+  font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;
+  color:var(--navy);background:var(--bg-opt);
+  border:1.5px solid var(--border);border-radius:8px;
+  padding:5px 11px;white-space:nowrap;min-width:68px;text-align:center;
+}
+.timer-display.warn{color:#d97706;border-color:#f59e0b;background:#fffbeb;}
+.dark .timer-display.warn{background:#2a1a00;border-color:#d97706;}
+.timer-display.danger{color:#dc2626;border-color:#ef4444;background:#fee2e2;}
+.dark .timer-display.danger{background:#2d0000;border-color:#dc2626;}
+
+/* header controls */
+.header-controls{display:flex;align-items:center;gap:6px;margin-left:auto;}
+.hc-btn{
+  background:var(--bg-opt);border:1.5px solid var(--border);border-radius:8px;
+  padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text-sub);
+  transition:.12s;line-height:1.3;white-space:nowrap;
+}
+.hc-btn:hover{border-color:var(--blue);color:var(--blue);}
+.hc-btn.danger-btn{border-color:#ef4444;color:#dc2626;}
+.hc-btn.danger-btn:hover{background:#fee2e2;}
+.dark .hc-btn.danger-btn:hover{background:#2d0000;}
+.mode-badge{padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;white-space:nowrap;}
+.mode-badge.study{background:#fef9c3;color:#713f12;border:1.5px solid #fde047;}
+.dark .mode-badge.study{background:#2a200a;color:#fde047;border-color:#5a4200;}
+.mode-badge.test{background:var(--lblue);color:var(--blue);border:1.5px solid var(--blue);}
+
+/* ── DOTS ── */
+.test-content{max-width:780px;margin:0 auto;padding:14px 14px 0;}
+.dot-nav{display:flex;flex-wrap:wrap;gap:5px;background:var(--bg-card);border-radius:12px;padding:12px;margin-bottom:14px;box-shadow:var(--shadow);}
+.dot{width:30px;height:30px;border-radius:6px;border:none;cursor:pointer;font-size:10px;font-weight:700;transition:.1s;flex-shrink:0;}
+.dot.unanswered{background:var(--bg-dot-un);color:var(--text-muted);}
+.dot.answered{background:#22c55e;color:white;}
+.dot.partial{background:#f59e0b;color:white;}
+.dot.current{background:var(--blue);color:white;outline:2px solid #93c5fd;outline-offset:1px;}
+.dot.flagged{background:#f59e0b;color:white;}
+.dot.correct-study{background:#16a34a;color:white;}
+.dot.wrong-study{background:#dc2626;color:white;}
+.dot.partial-study{background:#d97706;color:white;}
+
+/* ── QUESTION CARD ── */
+.q-card{background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;}
+.q-header{padding:14px 16px 0;display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;}
+.q-num{background:var(--navy);color:white;border-radius:8px;padding:4px 10px;font-weight:800;font-size:13px;flex-shrink:0;margin-top:2px;}
+.topic-tag{border-radius:20px;padding:4px 11px;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.q-text{padding:11px 16px 5px;font-size:var(--fs-q);font-weight:600;line-height:1.65;color:var(--text-main);}
+.exhibit{background:#1e1e2e;border-radius:8px;margin:6px 16px;padding:11px 13px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#cdd6f4;line-height:1.7;overflow-x:auto;white-space:pre;}
+.multi-note{background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:7px 13px;font-size:12px;color:#713f12;margin:0 16px 6px;font-weight:500;}
+.dark .multi-note{background:#2a200a;border-color:#5a4200;color:#fde047;}
+
+/* ── EXHIBIT IMAGE ── */
+.q-img{padding:10px 16px 4px;text-align:center;}
+.q-img img{max-width:100%;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:zoom-in;transition:opacity .15s;}
+.q-img img:hover{opacity:.85;}
+
+/* ── OPTIONS ── */
+.options{padding:8px 12px 10px;}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border:2px solid var(--border-opt);border-radius:10px;margin-bottom:7px;cursor:pointer;transition:.12s;background:var(--bg-opt);}
+.opt:hover:not(.locked){border-color:#93c5fd;background:var(--bg-opt-hover);}
+.opt.selected{border-color:var(--blue);background:var(--bg-opt-sel);}
+.opt.locked{cursor:default;}
+.opt.opt-correct{border-color:#16a34a!important;background:var(--lgreen)!important;}
+.opt.opt-wrong{border-color:#dc2626!important;background:var(--lred)!important;}
+.opt.opt-missed{border-color:#16a34a!important;background:var(--lgreen)!important;opacity:.75;}
+.opt input{accent-color:var(--blue);flex-shrink:0;margin-top:3px;cursor:pointer;width:16px;height:16px;}
+.opt.locked input{cursor:default;}
+.opt label{font-size:var(--fs-opt);color:var(--text-sub);cursor:pointer;line-height:1.5;}
+.opt.locked label{cursor:default;}
+.opt-letter{font-weight:800;color:var(--text-muted);margin-right:2px;}
+.opt.opt-correct .opt-letter,.opt.opt-correct label{color:var(--green)!important;font-weight:700;}
+.opt.opt-missed .opt-letter,.opt.opt-missed label{color:var(--green)!important;font-weight:600;}
+.opt.opt-wrong .opt-letter,.opt.opt-wrong label{color:var(--red)!important;}
+
+/* ── STUDY FEEDBACK ── */
+.study-feedback{margin:0 16px 6px;padding:10px 14px;border-radius:9px;font-size:13px;font-weight:600;display:none;line-height:1.5;}
+.study-feedback.show{display:block;}
+.study-feedback.correct{background:var(--lgreen);color:var(--green);border:1px solid #86efac;}
+.dark .study-feedback.correct{background:#0d2d1a;color:#3fb950;border-color:#1a4d2a;}
+.study-feedback.partial{background:var(--lyellow);color:var(--yellow);border:1px solid #fde047;}
+.dark .study-feedback.partial{background:#2a200a;color:#fbbf24;border-color:#5a4200;}
+.study-feedback.wrong{background:var(--lred);color:var(--red);border:1px solid #fca5a5;}
+.dark .study-feedback.wrong{background:#2d0d0d;color:#f85149;border-color:#5a1a1a;}
+.exp-text{margin-top:6px;font-size:12px;font-weight:400;opacity:.9;line-height:1.55;}
+
+/* ── FLAG + NAV ── */
+.flag-row{padding:4px 16px 8px;display:flex;justify-content:flex-end;}
+.flag-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:5px 11px;font-size:12px;color:var(--text-muted);cursor:pointer;}
+.flag-btn.flagged{border-color:#f59e0b;color:#d97706;background:#fffbeb;}
+.dark .flag-btn.flagged{background:#2a1a00;}
+.card-nav{display:flex;gap:10px;padding:0 12px 14px;}
+.btn-prev{background:var(--bg-dot-un);color:var(--text-sub);border:none;padding:13px 20px;border-radius:10px;font-weight:600;cursor:pointer;flex:1;font-size:14px;transition:background .12s;}
+.btn-prev:hover{background:var(--gray200);}
+.btn-next{background:var(--blue);color:white;border:none;padding:13px 20px;border-radius:10px;font-weight:700;cursor:pointer;flex:2;font-size:14px;transition:background .12s;}
+.btn-next:hover{background:#1447b9;}
+.btn-check{background:#7c3aed;color:white;border:none;padding:13px 20px;border-radius:10px;font-weight:700;cursor:pointer;flex:2;font-size:14px;transition:background .12s;}
+.btn-check:hover{background:#6d28d9;}
+.btn-check:disabled{opacity:.4;cursor:not-allowed;}
+.btn-submit{background:#16a34a;color:white;border:none;padding:13px 20px;border-radius:10px;font-weight:700;cursor:pointer;flex:2;font-size:14px;transition:background .12s;}
+.btn-submit:hover{background:#15803d;}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--bg-card);border-radius:16px;padding:28px 26px;max-width:400px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.5);}
+.modal-box h3{font-size:17px;font-weight:800;color:var(--navy);margin-bottom:10px;}
+.modal-box p{font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:16px;}
+.modal-list{background:var(--bg-opt);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--text-sub);max-height:180px;overflow-y:auto;}
+.modal-list li{margin-bottom:4px;}
+.modal-btns{display:flex;gap:10px;}
+.modal-btn-cancel{flex:1;padding:11px;border:1.5px solid var(--border);border-radius:9px;background:transparent;font-size:14px;font-weight:600;cursor:pointer;color:var(--text-sub);}
+.modal-btn-cancel:hover{background:var(--bg-opt);}
+.modal-btn-confirm{flex:1;padding:11px;border:none;border-radius:9px;background:var(--blue);color:white;font-size:14px;font-weight:700;cursor:pointer;}
+.modal-btn-confirm:hover{background:#1447b9;}
+.modal-btn-confirm.danger{background:#dc2626;}
+.modal-btn-confirm.danger:hover{background:#b91c1c;}
+
+/* ── RESULTS ── */
+#results-section{background:var(--bg-section);padding:24px 14px 60px;}
+#results-section.hidden{display:none;}
+.res-wrap{max-width:780px;margin:0 auto;}
+.score-card{border-radius:16px;padding:30px;text-align:center;margin-bottom:18px;}
+.score-card.pass{background:linear-gradient(135deg,#166534,#15803d);color:white;}
+.score-card.fail{background:linear-gradient(135deg,#7f1d1d,#991b1b);color:white;}
+.score-pct{font-size:68px;font-weight:900;line-height:1;}
+.score-label{font-size:17px;opacity:.9;margin-top:6px;}
+.score-sub{font-size:13px;opacity:.7;margin-top:4px;}
+.score-time{font-size:13px;opacity:.7;margin-top:3px;}
+.topic-breakdown{background:var(--bg-card);border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:var(--shadow);}
+.topic-breakdown h2{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:14px;}
+.tb-row{margin-bottom:11px;}
+.tb-label{display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;}
+.tb-name{font-weight:600;color:var(--text-sub);}
+.tb-bar{background:var(--gray100);border-radius:99px;height:7px;}
+.tb-fill{height:100%;border-radius:99px;}
+.tb-fill.good{background:#22c55e;}.tb-fill.ok{background:#f59e0b;}.tb-fill.bad{background:#ef4444;}
+.review-section{background:var(--bg-card);border-radius:14px;margin-bottom:18px;overflow:hidden;box-shadow:var(--shadow);}
+.review-header{padding:15px 18px;border-bottom:1px solid var(--gray100);display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+.review-header h2{font-size:15px;font-weight:700;color:var(--navy);}
+.toggle-icon{font-size:17px;transition:transform .2s;}
+.review-body{padding:0 18px;}
+.rev-q{border-bottom:1px solid var(--border);padding:14px 0;}
+.rev-q:last-child{border-bottom:none;}
+.rev-status{font-size:12px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.rev-status.correct{color:#16a34a;}.rev-status.partial{color:#d97706;}.rev-status.wrong{color:#dc2626;}.rev-status.skipped{color:#9ca3af;}
+.rev-q-text{font-size:13px;font-weight:600;color:var(--text-main);margin-bottom:7px;line-height:1.5;}
+.rev-exhibit{background:#1e1e2e;border-radius:6px;padding:9px 11px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#cdd6f4;margin-bottom:6px;line-height:1.6;overflow-x:auto;white-space:pre;}
+.rev-opt{font-size:12px;padding:5px 9px;border-radius:6px;margin-bottom:3px;}
+.rev-opt.correct-ans{background:var(--lgreen);color:var(--green);font-weight:700;}
+.rev-opt.user-wrong{background:var(--lred);color:var(--red);text-decoration:line-through;}
+.rev-opt.neutral{color:var(--text-muted);}
+.rev-exp{margin-top:8px;padding:9px 12px;background:var(--bg-opt);border-radius:8px;border-left:3px solid var(--blue);font-size:12px;color:var(--text-sub);line-height:1.6;}
+.rev-exp strong{color:var(--navy);font-size:11px;text-transform:uppercase;letter-spacing:.4px;}
+.btn-retake{width:100%;background:var(--blue);color:white;border:none;padding:15px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-top:6px;}
+.btn-retake:hover{background:#1447b9;}
+
+/* ── LIGHTBOX ── */
+#lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:1000;align-items:center;justify-content:center;cursor:zoom-out;}
+#lightbox.open{display:flex;}
+#lightbox img{max-width:93vw;max-height:88vh;border-radius:10px;box-shadow:0 8px 40px rgba(0,0,0,.7);object-fit:contain;}
+#lightbox-close{position:fixed;top:16px;right:20px;color:white;font-size:26px;cursor:pointer;background:rgba(0,0,0,.5);border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;}
+#lightbox-close:hover{background:rgba(255,255,255,.15);}
+
+/* ── TOPIC COLORS ── */
+.t-ro{background:#ffedd5;color:#c2410c;}.t-sw{background:#dbeafe;color:#1d4ed8;}
+.t-vl{background:#ede9fe;color:#6d28d9;}.t-st{background:#d1fae5;color:#065f46;}
+.t-ec{background:#ccfbf1;color:#0f766e;}.t-dh{background:#fef3c7;color:#92400e;}
+.t-wl{background:#fce7f3;color:#9d174d;}.t-se{background:#fee2e2;color:#991b1b;}
+.t-iv{background:#e0e7ff;color:#3730a3;}.t-os{background:#ecfccb;color:#3f6212;}
+.dark .t-ro{background:#3d1a00;color:#fb923c;}.dark .t-sw{background:#0d1e3d;color:#60a5fa;}
+.dark .t-vl{background:#1e1040;color:#a78bfa;}.dark .t-st{background:#022c22;color:#34d399;}
+.dark .t-ec{background:#002a26;color:#2dd4bf;}.dark .t-dh{background:#2d1a00;color:#fbbf24;}
+.dark .t-wl{background:#2d001e;color:#f472b6;}.dark .t-se{background:#2d0000;color:#f87171;}
+.dark .t-iv{background:#12104a;color:#818cf8;}.dark .t-os{background:#1a2e00;color:#a3e635;}
+
+@media(max-width:520px){
+  .splash-card{padding:28px 16px;}
+  .splash-card h1{font-size:22px;}
+  .test-sticky-header{padding:9px 11px;gap:7px;}
+  .qcount{font-size:13px;min-width:60px;}
+  .answered-count{display:none;}
+  .hc-btn{padding:5px 8px;font-size:12px;}
+  .timer-display{font-size:13px;padding:4px 8px;}
+  .test-content{padding:10px 10px 0;}
+  .btn-prev,.btn-next,.btn-submit,.btn-check{padding:12px 14px;font-size:13px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── LIGHTBOX ── -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="Exhibit">
+</div>
+
+<!-- ── MODAL (unanswered warning / end early confirm) ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <h3 id="modalTitle"></h3>
+    <p id="modalMsg"></p>
+    <ul class="modal-list" id="modalList" style="display:none"></ul>
+    <div class="modal-btns">
+      <button class="modal-btn-cancel" onclick="closeModal()">Go Back</button>
+      <button class="modal-btn-confirm" id="modalConfirm">Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SPLASH ── -->
+<section id="splash">
+  <div class="splash-card">
+    <div class="logo">📡</div>
+    <h1>CCNA 2 SRWE Final Exam</h1>
+    <p class="sub">Switching, Routing &amp; Wireless Essentials — v7.02</p>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="num" id="poolSize">174</div><div class="lbl">Question Pool</div></div>
+      <div class="stat-box"><div class="num">55</div><div class="lbl">Per Test</div></div>
+      <div class="stat-box"><div class="num">70%</div><div class="lbl">Pass Score</div></div>
+    </div>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="modeStudyBtn" onclick="setMode('study')">📖 Study Mode</button>
+      <button class="mode-btn" id="modeTestBtn" onclick="setMode('test')">🎯 Test Mode</button>
+    </div>
+    <p class="mode-desc" id="modeDesc">Answers and explanations shown immediately after each selection — great for learning.</p>
+    <div class="topic-pills">
+      <span class="pill">VLANs</span><span class="pill">STP</span><span class="pill">EtherChannel</span>
+      <span class="pill">DHCP/DHCPv6</span><span class="pill">Wireless</span>
+      <span class="pill">Port Security</span><span class="pill">Static Routes</span>
+      <span class="pill">OSPF/HSRP</span><span class="pill">Switching</span>
+    </div>
+    <button class="btn-start" onclick="startTest()">🚀 Start Practice Test</button>
+  </div>
+</section>
+
+<!-- ── TEST ── -->
+<section id="test-section" class="hidden">
+  <div class="test-sticky-header">
+    <div class="qcount" id="qcountLabel">Q 1 of 55</div>
+    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    <div class="answered-count" id="answeredLabel">0 answered</div>
+    <div class="timer-display" id="timerDisplay">0:00</div>
+    <div class="header-controls">
+      <button class="hc-btn" onclick="fontSize(-1)" title="Decrease font size">A−</button>
+      <button class="hc-btn" onclick="fontSize(+1)" title="Increase font size">A+</button>
+      <button class="hc-btn" onclick="toggleDark()" id="darkBtn">🌙</button>
+      <button class="hc-btn danger-btn" onclick="confirmEndEarly()" title="End test and score now">End Early</button>
+      <span class="mode-badge" id="modeBadge">Study</span>
+    </div>
+  </div>
+  <div class="test-content">
+    <div class="dot-nav" id="dotNav"></div>
+    <div id="questionArea"></div>
+  </div>
+</section>
+
+<!-- ── RESULTS ── -->
+<section id="results-section" class="hidden">
+  <div class="res-wrap">
+    <div class="score-card" id="scoreCard">
+      <div class="score-pct" id="scorePct"></div>
+      <div class="score-label" id="scoreLabel"></div>
+      <div class="score-sub" id="scoreSub"></div>
+      <div class="score-time" id="scoreTime"></div>
+    </div>
+    <div class="topic-breakdown">
+      <h2>📊 Score by Topic</h2>
+      <div id="topicBreakdown"></div>
+    </div>
+    <div class="review-section">
+      <div class="review-header" onclick="toggleReview()">
+        <h2>📋 Full Answer Review</h2>
+        <span class="toggle-icon" id="toggleIcon">▼</span>
+      </div>
+      <div class="review-body" id="reviewBody" style="display:none"></div>
+    </div>
+    <button class="btn-retake" onclick="retakeTest()">🔄 Take Another Practice Test</button>
+  </div>
+</section>
+
+<script>
+const POOL=[
+{t:'sw',tag:'Switching',q:'What will router R1 do with a packet that has a destination IPv6 address of 2001:db8:cafe:5::1?',o:['forward the packet out GigabitEthernet0/0','drop the packet','forward the packet out GigabitEthernet0/1','forward the packet out Serial0/0/0'],a:3,img:'https://itexamanswers.net/wp-content/uploads/2020/01/Switching-Routing-and-Wireless-Essentials-Version-7.00-Final-Answers-1.png',exp:'The route ::/0 is the compressed form of the 0000:0000:0000:0000:0000:0000:0000:0000/0 default route. The default route is used if a more specific route is not found in the routing table.'},
+{t:'ro',tag:'Routing',q:'Currently router R1 uses an EIGRP route learned from Branch2 to reach the 10.10.0.0/16 network. Which floating static route would create a backup route to the 10.10.0.0/16 network in the event that the link between R1 and Branch2 goes down?',o:['ip route 10.10.0.0 255.255.0.0 Serial 0/0/0 100','ip route 10.10.0.0 255.255.0.0 209.165.200.226 100','ip route 10.10.0.0 255.255.0.0 209.165.200.225 100','ip route 10.10.0.0 255.255.0.0 209.165.200.225 50'],a:2,img:'https://itexamanswers.net/wp-content/uploads/2020/01/Switching-Routing-and-Wireless-Essentials-Version-7.00-Final-Answers-2.png',exp:'A floating static route needs to have an administrative distance that is greater than the administrative distance of the active route in the routing table. Router R1 is using an EIGRP route which has an administrative distance of 90 to reach the 10.10.0.0/16 network. To be a backup route the floating static route must have an administrative distance greater than 90 and have a next hop address corresponding to the serial interface IP address of Branch1.'},
+{t:'ro',tag:'Routing',q:'R1 was configured with the static route command ip route 209.165.200.224 255.255.255.224 S0/0/0 and consequently users on network 172.16.0.0/16 are unable to reach resources on the Internet. How should this static route be changed to allow user traffic from the LAN to reach the Internet?',o:['Add an administrative distance of 254.','Change the destination network and mask to 0.0.0.0 0.0.0.0','Change the exit interface to S0/0/1.','Add the next-hop neighbor address of 209.165.200.226.'],a:1,img:'https://itexamanswers.net/wp-content/uploads/2016/02/sfdsgfdg5-1.jpg',exp:'The static route on R1 has been incorrectly configured with the wrong destination network and mask. The correct destination network and mask is 0.0.0.0 0.0.0.0.'},
+{t:'ro',tag:'Routing',q:'Which option shows a correctly configured IPv4 default static route?',o:['ip route 0.0.0.0 255.255.255.0 S0/0/0','ip route 0.0.0.0 0.0.0.0 S0/0/0','ip route 0.0.0.0 255.255.255.255 S0/0/0','ip route 0.0.0.0 255.0.0.0 S0/0/0'],a:1,exp:'The static route ip route 0.0.0.0 0.0.0.0 S0/0/0 is considered a default static route and will match all destination networks.'},
+{t:'ro',tag:'Routing',q:'Which static route command can be entered on R1 to forward traffic to the LAN connected to R2?',o:['ipv6 route 2001:db8:12:10::/64 S0/0/0','ipv6 route 2001:db8:12:10::/64 S0/0/1 fe80::2','ipv6 route 2001:db8:12:10::/64 S0/0/0 fe80::2','ipv6 route 2001:db8:12:10::/64 S0/0/1 2001:db8:12:10::1'],a:1,img:'https://itexamanswers.net/wp-content/uploads/2020/01/2020-01-31_201339-768x336-1.png',exp:'When using a link-local address as the next-hop for an IPv6 static route, you must also specify the exit interface (e.g., S0/0/1) because link-local addresses are not globally unique — the router needs to know which interface to use to reach that next-hop.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What is a method to launch a VLAN hopping attack?',o:['introducing a rogue switch and enabling trunking','sending spoofed native VLAN information','sending spoofed IP addresses from the attacking host','flooding the switch with MAC addresses'],a:0,exp:'VLAN hopping via switch spoofing involves connecting a rogue switch that negotiates a trunk link using DTP, gaining access to all VLANs. Keeping unused ports in access mode and disabling DTP prevents this.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A cybersecurity analyst is using the macof tool to evaluate configurations of switches deployed in the backbone network of an organization. Which type of LAN attack is the analyst targeting during this evaluation?',o:['VLAN hopping','DHCP spoofing','MAC address table overflow','VLAN double-tagging'],a:2,exp:'Macof is a network attack tool and is mainly used to flood LAN switches with MAC addresses.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'A network administrator is configuring a router as a DHCPv6 server. The administrator issues a show ipv6 dhcp pool command to verify the configuration. Which statement explains the reason that the number of active clients is 0?',o:['The default gateway address is not provided in the pool.','No clients have communicated with the DHCPv6 server yet.','The IPv6 DHCP pool configuration has no IPv6 address range specified.','The state is not maintained by the DHCPv6 server under stateless DHCPv6 operation.'],a:3,img:'https://itexamanswers.net/wp-content/uploads/2016/02/i210895v1n1_210895.jpg',exp:'Under the stateless DHCPv6 configuration, indicated by the command ipv6 nd other-config-flag, the DHCPv6 server does not maintain the state information, because client IPv6 addresses are not managed by the DHCP server. Because the clients will configure their IPv6 addresses by combining the prefix/prefix-length and a self-generated interface ID, the ipv6 dhcp pool configuration does not need to specify the valid IPv6 address range. And because clients will use the link-local address of the router interface as the default gateway address, the default gateway address is not necessary.'},
+{t:'os',tag:'HSRP/FHRP',q:'A network administrator configured routers R1 and R2 as part of HSRP group 1. After the routers have been reloaded, a user on Host1 complained of lack of connectivity to the Internet The network administrator issued the show standby brief command on both routers to verify the HSRP operations. In addition, the administrator observed the ARP table on Host1. Which entry should be seen in the ARP table on Host1 in order to gain connectivity to the Internet?',o:['the virtual IP address and the virtual MAC address for the HSRP group 1','the virtual IP address of the HSRP group 1 and the MAC address of R1','the virtual IP address of the HSRP group 1 and the MAC address of R2','the IP address and the MAC address of R1'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2020/01/2020-01-31_201813-768x556-1.png',exp:'Hosts will send an ARP request to the default gateway which is the virtual IP address. ARP replies from the HSRP routers contain the virtual MAC address. The host ARP tables will contain a mapping of the virtual IP to the virtual MAC.'},
+{t:'sw',tag:'Switching',q:'Which statement is correct about how a Layer 2 switch determines how to forward frames?',o:['Frame forwarding decisions are based on MAC address and port mappings in the CAM table.','Only frames with a broadcast destination address are forwarded out all active switch ports.','Unicast frames are always forwarded regardless of the destination MAC address.','Cut-through frame forwarding ensures that invalid frames are always dropped.'],a:0,exp:'Cut-through frame forwarding reads up to only the first 22 bytes of a frame, which excludes the frame check sequence and thus invalid frames may be forwarded. In addition to broadcast frames, frames with a destination MAC address that is not in the CAM are also flooded out all active ports. Unicast frames are not always forwarded. Received frames with a destination MAC address that is associated with the switch port on which it is received are not forwarded because the destination exists on the network segment connected to that port.'},
+{t:'sw',tag:'Switching',q:'Which statement describes a result after multiple Cisco LAN switches are interconnected?',o:['The broadcast domain expands to all switches.','One collision domain exists per switch.','There is one broadcast domain and one collision domain per switch.','Frame collisions increase on the segments connecting the switches.','Unicast frames are always forwarded regardless of the destination MAC address.'],a:0,exp:'In Cisco LAN switches, the microsegmentation makes it possible for each port to represent a separate segment and thus each switch port represents a separate collision domain. This fact will not change when multiple switches are interconnected. However, LAN switches do not filter broadcast frames. A broadcast frame is flooded to all ports. Interconnected switches form one big broadcast domain.'},
+{t:'sw',tag:'Switching',q:'How is a frame sent from PCA forwarded to PCC if the MAC address table on switch SW1 is empty?',o:['SW1 forwards the frame directly to SW2. SW2 floods the frame to all ports connected to SW2, excluding the port through which the frame entered the switch.','SW1 floods the frame on all ports on the switch, excluding the interconnected port to switch SW2 and the port through which the frame entered the switch.','SW1 floods the frame on all ports on SW1, excluding the port through which the frame entered the switch.','SW1 drops the frame because it does not know the destination MAC address.'],a:2,img:'https://itexamanswers.net/wp-content/uploads/2020/01/2020-01-31_202702.png',exp:'When a switch powers on, the MAC address table is empty. The switch builds the MAC address table by examining the source MAC address of incoming frames. The switch forwards based on the destination MAC address found in the frame header. If a switch has no entries in the MAC address table or if the destination MAC address is not in the switch table, the switch will forward the frame out all ports except the port that brought the frame into the switch.'},
+{t:'vl',tag:'VLANs & Trunking',q:'An administrator is trying to remove configurations from a switch. After using the command erase startup-config and reloading the switch, the administrator finds that VLANs 10 and 100 still exist on the switch. Why were these VLANs not removed?',o:['Because these VLANs are stored in a file that is called vlan.dat that is located in flash memory, this file must be manually deleted.','These VLANs cannot be deleted unless the switch is in VTP client mode.','These VLANs are default VLANs that cannot be removed.','These VLANs can only be removed from the switch by using the no vlan 10 and no vlan 100 commands.'],a:0,exp:'Standard range VLANs (1-1005) are stored in a file that is called vlan.dat that is located in flash memory. Erasing the startup configuration and reloading a switch does not automatically remove these VLANs. The vlan.dat file must be manually deleted from flash memory and then the switch must be reloaded.'},
+{t:'ec',tag:'EtherChannel',q:'A network administrator has connected two switches together using EtherChannel technology. If STP is running, what will be the end result?',o:['STP will block one of the redundant links.','The switches will load balance and utilize both EtherChannels to forward packets.','The resulting loop will create a broadcast storm.','Both port channels will shutdown.'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2020/01/Switching-Routing-and-Wireless-Essentials-Version-7.00-Final-Answers-9.png',exp:'Cisco switches support two protocols for negotiating a channel between two switches: LACP and PAgP. PAgP is Cisco-proprietary. In the topology shown, the switches are connected to each other using redundant links. By default, STP is enabled on switch devices. STP will block redundant links to prevent loops.'},
+{t:'sw',tag:'Switching',q:'What is a secure configuration option for remote access to a network device?',o:['Configure an ACL and apply it to the VTY lines.','Configure 802.1x.','Configure SSH.','Configure Telnet.'],a:2,exp:'SSH (Secure Shell) encrypts the entire management session, protecting credentials and commands. Telnet sends everything in plain text and should never be used for remote device management.'},
+{t:'wl',tag:'Wireless',q:'Which wireless encryption method is the most secure?',o:['WPA2 with AES','WPA2 with TKIP','WEP','WPA'],a:0,exp:'WPA2 with AES (Advanced Encryption Standard) uses CCMP encryption and provides the strongest security for Wi-Fi. WEP is broken, WPA uses the weaker TKIP cipher, and WPA2-TKIP is less secure than WPA2-AES.'},
+{t:'wl',tag:'Wireless',q:'After attaching four PCs to the switch ports, configuring the SSID and setting authentication properties for a small office network, a technician successfully tests the connectivity of all PCs that are connected to the switch and WLAN. A firewall is then configured on the device prior to connecting it to the Internet. What type of network device includes all of the described features?',o:['firewall appliance','wireless router','switch','standalone wireless access point'],a:1,exp:'A wireless router combines a switch (for wired PCs), a wireless access point (for WLAN/SSID), a DHCP server, and a firewall/NAT into a single consumer device — making it the correct answer for this multi-function scenario.'},
+{t:'sw',tag:'Switching',q:'Host A has sent a packet to host B. What will be the source MAC and IP addresses on the packet when it arrives at host B?',o:['Source MAC: 00E0.FE91.7799Source IP: 10.1.1.10','Source MAC: 00E0.FE10.17A3Source IP: 10.1.1.10','Source MAC: 00E0.FE10.17A3Source IP: 192.168.1.1','Source MAC: 00E0.FE91.7799Source IP: 10.1.1.1','Source MAC: 00E0.FE91.7799Source IP: 192.168.1.1'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2016/02/p39-prac-final-ccna2.jpg',exp:'As a packet traverses the network, the Layer 2 addresses will change at every hop as the packet is de-encapsulated and re-encapsulated, but the Layer 3 addresses will remain the same.'},
+{t:'ro',tag:'Routing',q:'In addition to static routes directing traffic to networks 10.10.0.0/16 and 10.20.0.0/16, Router HQ is also configured with the following command:',o:['Packets that are received from the Internet will be forwarded to one of the LANs connected to R1 or R2.','Packets with a destination network that is not 10.10.0.0/16 or is not 10.20.0.0/16 or is not a directly connected network will be forwarded to the Internet.','Packets from the 10.10.0.0/16 network will be forwarded to network 10.20.0.0/16, and packets from the 10.20.0.0/16 network will be forwarded to network 10.10.0.0/16.','Packets that are destined for networks that are not in the routing table of HQ will be dropped.'],a:1,img:'https://itexamanswers.net/wp-content/uploads/2020/01/2020-01-31_203919-768x465-1.png',exp:'The command ip route 0.0.0.0 0.0.0.0 serial 0/1/1 is a default static route. It matches any destination not found in the routing table and forwards those packets out Serial 0/1/1 toward the Internet.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What protocol or technology disables redundant paths to eliminate Layer 2 loops?',o:['VTP','STP','EtherChannel','DTP'],a:1,exp:'Spanning Tree Protocol (STP) prevents Layer 2 loops by placing redundant switch ports into a blocking state. Without STP, broadcast storms would bring a switched network down instantly.'},
+{t:'vl',tag:'VLANs & Trunking',q:'Based on the exhibited configuration and output, why is VLAN 99 missing?',o:['because VLAN 99 is not a valid management VLAN','because there is a cabling problem on VLAN 99','because VLAN 1 is up and there can only be one management VLAN on the switch','because VLAN 99 has not yet been created'],a:3,img:'https://itexamanswers.net/wp-content/uploads/2020/01/rx4-768x474-1.png',exp:'An interface configured with \'switchport access vlan 99\' will not come up if VLAN 99 does not exist in the VLAN database. VLANs must be created with the \'vlan 99\' command before they can be used.'},
+{t:'vl',tag:'VLANs & Trunking',q:'Which two VTP modes allow for the creation, modification, and deletion of VLANs on the local switch? (Choose two.)',o:['client','master','distribution','slave','server','transparent'],m:true,ma:[4, 5],a:null,exp:'VTP server mode allows full VLAN management (create, modify, delete) and propagates changes to VTP clients. Transparent mode also allows local VLAN management but does not apply or forward VTP updates — it just passes them through.'},
+{t:'vl',tag:'VLANs & Trunking',q:'Which three steps should be taken before moving a Cisco switch to a new VTP management domain? (Choose three.)',o:['Configure the switch with the name of the new management domain.','Reset the VTP counters to allow the switch to synchronize with the other switches in the domain.','Configure the VTP server in the domain to recognize the BID of the new switch.','Download the VTP database from the VTP server in the new domain.','Select the correct VTP mode and version.','Reboot the switch.'],m:true,ma:[0, 4, 5],a:null,exp:'When adding a new switch to a VTP domain, it is critical to configure the switch with a new domain name, the correct VTP mode, VTP version number, and password. A switch with a higher revision number can propagate invalid VLANs and erase valid VLANs thus preventing connectivity for multiple devices on the valid VLANs.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A network administrator is preparing the implementation of Rapid PVST+ on a production network. How are the Rapid PVST+ link types determined on the switch interfaces?',o:['Link types can only be configured on access ports configured with a single VLAN.','Link types can only be determined if PortFast has been configured.','Link types are determined automatically.','Link types must be configured with specific port configuration commands.'],a:2,exp:'When Rapid PVST+ is being implemented, link types are automatically determined but can be specified manually. Link types can be either point-to-point, shared, or edge.'},
+{t:'st',tag:'STP',q:'All the displayed switches are Cisco 2960 switches with the same default priority and operating at the same bandwidth. Which three ports will be STP designated ports? (Choose three.)',o:['fa0/9','fa0/13','fa0/10','fa0/20','fa0/21','fa0/11'],m:true,ma:[1, 2, 4],a:null,img:'https://itexamanswers.net/wp-content/uploads/2020/01/rx5.png',exp:'Given that all the switches have the same default priority and are operating at the same bandwidth, the switch with the lowest MAC address will become the root bridge. This would be SW3 and all its ports would be designated ports. SW1 has a lower MAC address than SW2 has and therefore port fa0/10 will become the designated port on that link.'},
+{t:'ro',tag:'Routing',q:'How will a router handle static routing differently if Cisco Express Forwarding is disabled?',o:['It will not perform recursive lookups.','Ethernet multiaccess interfaces will require fully specified static routes to avoid routing inconsistencies.','Static routes that use an exit interface will be unnecessary.','Serial point-to-point interfaces will require fully specified static routes to avoid routing inconsistencies.'],a:1,exp:'In most platforms running IOS 12.0 or later, Cisco Express Forwarding is enabled by default. Cisco Express Forwarding eliminates the need for the recursive lookup. If Cisco Express Forwarding is disabled, multiaccess network interfaces require fully specified static routes in order to avoid inconsistencies in their routing tables. Point-to-point interfaces do not have this problem, because multiple end points are not present. With or without Cisco Express Forwarding enabled, using an exit interface when configuring a static route is a viable option.'},
+{t:'ro',tag:'Routing',q:'Compared with dynamic routes, what are two advantages of using static routes on a router? (Choose two.)',o:['They improve netw​ork security.','They take less time to converge when the network topology changes.','They improve the efficiency of discovering neighboring networks.','They use fewer router resources.'],m:true,ma:[0, 3],a:null,exp:'Static routes are manually configured on a router. Static routes are not automatically updated and must be manually reconfigured if the network topology changes. Thus static routing improves network security because it does not make route updates among neighboring routers. Static routes also improve resource efficiency by using less bandwidth, and no CPU cycles are used to calculate and communicate routes.'},
+{t:'ro',tag:'Routing',q:'Which route was configured as a static route to a specific network using the next-hop address?',o:['S 10.17.2.0/24 [1/0] via 10.16.2.2','S 0.0.0.0/0 [1/0] via 10.16.2.2','S 10.17.2.0/24 is directly connected, Serial 0/0/0','C 10.16.2.0/24 is directly connected, Serial0/0/0'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2020/01/rx6.png',exp:'The C in a routing table indicates an interface that is up and has an IP address assigned. The S in a routing table signifies that a route was installed using the ip route command. Two of the routing table entries shown are static routes to a specific destination (the 192.168.2.0 network). The entry that has the S denoting a static route and [1/0] was configured using the next-hop address. The other entry (S 192.168.2.0/24 is directly connected, Serial 0/0/0) is a static route configured using the exit interface. The entry with the 0.0.0.0 route is a default static route which is used to send packets to any destination network that is not specifically listed in the routing table.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What is the effect of entering the spanning-tree portfast configuration command on a switch?',o:['It disables an unused port.','It disables all trunk ports.','It enables portfast on a specific switch interface.','It checks the source L2 address in the Ethernet header against the sender L2 address in the ARP body.'],a:2,exp:'The \'spanning-tree portfast\' interface command immediately moves the port to the forwarding state, bypassing the listening and learning stages. It should only be used on ports connected to end devices, never to other switches.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'What is the IPv6 prefix that is used for link-local addresses?',o:['FF01::/8','2001::/3','FC00::/7','FE80::/10'],a:3,exp:'The IPv6 link-local prefix is FE80::/10 and is used to create a link-local IPv6 address on an interface.'},
+{t:'vl',tag:'VLANs & Trunking',q:'Which two statements are characteristics of routed ports on a multilayer switch? (Choose two.)​',o:['In a switched network, they are mostly configured between switches at the core and distribution layers.','The interface vlan command has to be entered to create a VLAN on routed ports.','They support subinterfaces, like interfaces on the Cisco IOS routers.','They are used for point-to-multipoint links.','They are not associated with a particular VLAN.'],m:true,ma:[0, 4],a:null,exp:'Routed ports are physical ports that act similarly to a router interface. They are not associated with a particular VLAN, they do not support subinterfaces, and they are used for point-to-point links. In a switched network, they are mostly configured between switches at the core and distribution layers. To configure routed ports, the no switchport interface command has to be used on the appropriate ports.'},
+{t:'vl',tag:'VLANs & Trunking',q:'Successful inter-VLAN routing has been operating on a network with multiple VLANs across multiple switches for some time. When an inter-switch trunk link fails and Spanning Tree Protocol brings up a backup trunk link, it is reported that hosts on two VLANs can access some, but not all the network resources that could be accessed previously. Hosts on all other VLANS do not have this problem. What is the most likely cause of this problem?',o:['The protected edge port function on the backup trunk interfaces has been disabled.','The allowed VLANs on the backup link were not configured correctly.','Dynamic Trunking Protocol on the link has failed.','Inter-VLAN routing also failed when the trunk link failed.'],a:1,exp:'Trunk links must be explicitly configured with the allowed VLAN list. When STP failed over to the backup trunk, that link was missing VLANs 10 and 20 from its allowed list, so traffic for those VLANs was dropped.'},
+{t:'ec',tag:'EtherChannel',q:'Which command will start the process to bundle two physical interfaces to create an EtherChannel group via LACP?',o:['interface port-channel 2','channel-group 1 mode desirable','interface range GigabitEthernet 0/4 – 5','channel-group 2 mode auto'],a:2,exp:'EtherChannel configuration always begins by selecting the physical interfaces to bundle using \'interface range\'. After entering range mode, you apply the channel-group command with the desired protocol (LACP uses \'active/passive\').'},
+{t:'sw',tag:'Switching',q:'What action takes place when a frame entering a switch has a multicast destination MAC address?',o:['The switch will forward the frame out all ports except the incoming port.','The switch forwards the frame out of the specified port.','The switch adds a MAC address table entry mapping for the destination MAC address and the ingress port.','The switch replaces the old entry and uses the more current port.'],a:0,exp:'If the destination MAC address is a broadcast or a multicast, the frame is also flooded out all ports except the incoming port.'},
+{t:'ro',tag:'Routing',q:'A junior technician was adding a route to a LAN router. A traceroute to a device on the new network revealed a wrong path and unreachable status. What should be done or checked?',o:['Verify that there is not a default route in any of the edge router routing tables.','Check the configuration on the floating static route and adjust the AD.','Create a floating static route to that network.','Check the configuration of the exit interface on the new static route.'],a:3,exp:'A wrong path in traceroute almost always means the static route\'s exit interface or next-hop address is misconfigured. Verifying the exit interface ensures traffic leaves on the correct physical link toward the destination.'},
+{t:'ec',tag:'EtherChannel',q:'Select the three PAgP channel establishment modes. (Choose three.)',o:['auto','default','passive','desirable','extended','on'],m:true,ma:[0, 3, 5],a:null,exp:'PAgP (Port Aggregation Protocol) is Cisco-proprietary. Its three modes are: \'on\' (forces channel, no negotiation), \'desirable\' (actively negotiates), and \'auto\' (responds to negotiation but won\'t initiate). LACP uses \'active\' and \'passive\' instead.'},
+{t:'ro',tag:'Routing',q:'A static route has been configured on a router. However, the destination network no longer exists. What should an administrator do to remove the static route from the routing table?',o:['Remove the route using the no ip route command.','Change the administrative distance for that route.','Change the routing metric for that route.','Nothing. The static route will go away on its own.'],a:0,exp:'When the destination network specified in a static route does not exist anymore, the static route stays in the routing table until it is manually removed by using theno ip routecommand.'},
+{t:'sw',tag:'Switching',q:'What can be concluded about the configuration shown on R1?',o:['R1 is configured as a DHCPv4 relay agent.','R1 is operating as a DHCPv4 server.','R1 will broadcast DHCPv4 requests on behalf of local DHCPv4 clients.','R1 will send a message to a local DHCPv4 client to contact a DHCPv4 server at 10.10.10.8.'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2020/01/rx7.png',exp:'The \'ip helper-address\' command on a router interface makes it a DHCP relay agent. It intercepts broadcast DHCP Discover messages from clients and forwards them as unicast to the specified DHCP server IP address.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'R1 has been configured as shown. However, PC1 is not able to receive an IPv4 address. What is the problem?​',o:['The ip helper-address command was applied on the wrong interface.','R1 is not configured as a DHCPv4 server.​','A DHCP server must be installed on the same LAN as the host that is receiving the IP address.','The ip address dhcp command was not issued on the interface Gi0/1.'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2020/01/rx9.png',exp:'The ip helper-address command has to be applied on interface Gi0/0. This command must be present on the interface of the LAN that contains the DHCPv4 client PC1 and must be directed to the correct DHCPv4 server.'},
+{t:'wl',tag:'Wireless',q:'What two default wireless router settings can affect network security? (Choose two.)',o:['The SSID is broadcast.','MAC address filtering is enabled.','WEP encryption is enabled.','The wireless channel is automatically selected.','A well-known administrator password is set.'],m:true,ma:[0, 4],a:null,exp:'Default settings on wireless routers often include broadcasting the SSID and using a well-known administrative password. Both of these pose a security risk to wireless networks. WEP encryption and MAC address filtering are not set by default. The automatic selection of the wireless channel poses no security risks.',img:'https://itexamanswers.net/wp-content/uploads/2020/01/i232273v1n1_232273.png'},
+{t:'se',tag:'Security',q:'What is the common term given to SNMP log messages that are generated by network devices and sent to the SNMP server?',o:['traps','acknowledgments','auditing','warnings'],a:0,exp:'SNMP traps are unsolicited alert messages sent by network devices to the SNMP manager when specific events occur (e.g., interface down, high CPU). They allow proactive monitoring without the manager needing to poll constantly.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A network administrator is adding a new WLAN on a Cisco 3500 series WLC. Which tab should the administrator use to create a new VLAN interface to be used for the new WLAN?',o:['WIRELESS','MANAGEMENT','CONTROLLER','WLANs'],a:2,exp:'On the Cisco 3500 WLC, the CONTROLLER tab is used to create and configure VLAN interfaces. These interfaces are then mapped to WLANs to provide network connectivity for wireless clients.'},
+{t:'wl',tag:'Wireless',q:'A network administrator is configuring a WLAN. Why would the administrator change the default DHCP IPv4 addresses on an AP?',o:['to restrict access to the WLAN by authorized, authenticated users only','to monitor the operation of the wireless network','to reduce outsiders intercepting data or accessing the wireless network by using a well-known address range','to reduce the risk of interference by external devices such as microwave ovens'],a:2,exp:'Default AP/router DHCP ranges (like 192.168.1.x) are well-known and often targeted. Changing to a non-standard range makes it slightly harder for unauthorized users to connect and navigate the network.'},
+{t:'wl',tag:'Wireless',q:'Which two functions are performed by a WLC when using split media access control (MAC)? (Choose two.)',o:['packet acknowledgments and retransmissions','frame queuing and packet prioritization','beacons and probe responses','frame translation to other protocols','association and re-association of roaming clients'],m:true,ma:[3, 4],a:null,exp:'In split-MAC architecture, the WLC handles the management/control functions: frame translation, authentication, association, and roaming. The lightweight AP handles only the real-time RF functions like beacons and acknowledgments.'},
+{t:'vl',tag:'VLANs & Trunking',q:'On what switch ports should BPDU guard be enabled to enhance STP stability?',o:['all PortFast-enabled ports','only ports that are elected as designated ports','only ports that attach to a neighboring switch','all trunk ports that are not root ports'],a:0,exp:'BPDU guard should be enabled on all PortFast-enabled ports. If a BPDU is received on such a port (indicating a switch was connected), BPDU guard immediately err-disables the port to prevent STP topology changes.'},
+{t:'st',tag:'STP',q:'Which network attack is mitigated by enabling BPDU guard?',o:['rogue switches on a network','CAM table overflow attacks','MAC address spoofing','rogue DHCP servers on a network'],a:0,exp:'There are several recommended STP stability mechanisms to help mitigate STP manipulation attacks:PortFast – used to immediately bring an interface configured as an access or trunk port to the forwarding state from a blocking state. Applied to all end-user ports.BPDU guard – immediately error-disables a port that receives a BPDU. Applied to all end-user ports.The receipt of BPDUs may be part of an unauthorized attempt to add a switch to the network.Root guard – prevents a switch from becoming the root switch. Applied to all ports where the root switch should not be located.Loop guard – detects unidirectional links to prevent alternate or root ports from becoming designated ports. Applied to all ports that are or can become nondesignated.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'Why is DHCP snooping required when using the Dynamic ARP Inspection feature?',o:['It relies on the settings of trusted and untrusted ports set by DHCP snooping.','It uses the MAC address table to verify the default gateway IP address.','It redirects ARP requests to the DHCP server for verification.','It uses the MAC-address-to-IP-address binding database to validate an ARP packet.'],a:3,exp:'DAI relies on DHCP snooping. DHCP snooping listens to DHCP message exchanges and builds a bindings database of valid tuples (MAC address, IP address, VLAN interface).When DAI is enabled, the switch drops ARP packet if the sender MAC address and sender IP address do not match an entry in the DHCP snooping bindings database. However, it can be overcome through static mappings. Static mappings are useful when hosts configure static IP addresses, DHCP snooping cannot be run, or other switches in the network do not run dynamic ARP inspection. A static mapping associates an IP address to a MAC address on a VLAN.'},
+{t:'ro',tag:'Routing',q:'Router R1 has an OSPF neighbor relationship with the ISP router over the 192.168.0.32 network. The 192.168.0.36 network link should serve as a backup when the OSPF link goes down. The floating static route command ip route 0.0.0.0 0.0.0.0 S0/0/1 100 was issued on R1 and now traffic is using the backup link even when the OSPF link is up and functioning. Which change should be made to the static route command so that traffic will only use the OSPF link when it is up?​',o:['Change the administrative distance to 120.','Add the next hop neighbor address of 192.168.0.36.','Change the destination network to 192.168.0.34.','Change the administrative distance to 1.'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2016/02/i210868v1n2_210868.gif',exp:'The problem with the current floating static route is that the administrative distance is set too low. The administrative distance will need to be higher than that of OSPF, which is 110, so that the router will only use the OSPF link when it is up.'},
+{t:'sw',tag:'Switching',q:'What is the metric to forward a data packet with the IPv6 destination address 2001:DB8:ACAD:E:240:BFF:FED4:9DD2?',o:['90','128','2170112','2681856','2682112','3193856'],a:4,img:'https://itexamanswers.net/wp-content/uploads/2020/01/CCNA-2-v7-exam-answers.png',exp:'The IPv6 destination address 2001:DB8:ACAD:E:240:BFF:FED4:9DD2 belongs to the network of 2001:DB8:ACAD:E::/64. In the routing table, the route to forward the packet has Serial 0/0/1 as an exit interface and 2682112 as the cost.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A network administrator is configuring a new Cisco switch for remote management access. Which three items must be configured on the switch for the task? (Choose three.)',o:['IP address','VTP domain','vty lines','default VLAN','default gateway','loopback address'],m:true,ma:[0, 2, 4],a:null,exp:'To enable the remote management access, the Cisco switch must be configured with an IP address and a default gateway. In addition, vty lines must configured to enable either Telnet or SSH connections. A loopback address, default VLAN, and VTP domain configurations are not necessary for the purpose of remote switch management.'},
+{t:'ro',tag:'Routing',q:'Which statement shown in the output allows router R1 to respond to stateless DHCPv6 requests?',o:['ipv6 nd other-config-flag​','prefix-delegation 2001:DB8:8::/48 00030001000E84244E70​','ipv6 dhcp server LAN1​','ipv6 unicast-routing','dns-server 2001:DB8:8::8​'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2020/01/CCNA-2-v7-exam-answers-56.png',exp:'The interface command ipv6 nd other-config-flag allows RA messages to be sent on this interface, indicating that additional information is available from a stateless DHCPv6 server.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A Layer 3 switch routes for three VLANs and connects to a router for Internet connectivity. Which two configurations would be applied to the switch? (Choose two.)',o:['Configure the 5 GHz band for streaming multimedia and time sensitive traffic.','Configure the security mode to WPA Personal TKIP/AES for one network and WPA2 Personal AES for the other network','Configure the 2.4 GHz band for basic internet traffic that is not time sensitive.','Configure the security mode to WPA Personal TKIP/AES for both networks.','Configure a common SSID for both split networks.'],m:true,ma:[0, 2],a:null,img:'https://itexamanswers.net/wp-content/uploads/2020/01/CCNA-2-v7-exam-answers-57.png',exp:'A Layer 3 switch connecting to a router needs a routed port (\'no switchport\') with an IP address for the uplink. IP routing must also be enabled globally so the switch can route between VLANs using its SVI interfaces.'},
+{t:'ro',tag:'Routing',q:'A company has just switched to a new ISP. The ISP has completed and checked the connection from its site to the company. However, employees at the company are not able to access the internet. What should be done or checked?',o:['Verify that the static route to the server is present in the routing table.','Check the configuration on the floating static route and adjust the AD.','Ensure that the old default route has been removed from the company edge routers.','Create a floating static route to that network.'],a:2,exp:'When switching ISPs, the old default route on the edge router still points to the previous ISP\'s next-hop, which is no longer reachable. Removing the old default route allows the new ISP route to take effect.'},
+{t:'sw',tag:'Switching',q:'Which information does a switch use to populate the MAC address table?',o:['the destination MAC address and the incoming port','the destination MAC address and the outgoing port','the source and destination MAC addresses and the incoming port','the source and destination MAC addresses and the outgoing port','the source MAC address and the incoming port','the source MAC address and the outgoing port'],a:4,exp:'To maintain the MAC address table, the switch uses the source MAC address of the incoming packets and the port that the packets enter. The destination address is used to select the outgoing port.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A network administrator is reviewing the configuration of switch S1. Which protocol has been implemented to group multiple physical ports into one logical link?',o:['PAgP','DTP','LACP','STP'],a:0,exp:'The EtherChannel protocol PAgP provides the grouping of physical interfaces and utilizes the modes of auto and desirable. The EtherChannel protocol LACP provides the grouping of physical interfaces and utilizes the modes of passive and active. DTP and STP are not utilized to group multiple physical interfaces into a single logical link.',img:'https://itexamanswers.net/wp-content/uploads/2017/03/p23-1.png'},
+{t:'ro',tag:'Routing',q:'Which type of static route is configured with a greater administrative distance to provide a backup route to a route learned from a dynamic routing protocol?',o:['floating static route','default static route','summary static route','standard static route'],a:0,exp:'There are four basic types of static routes. Floating static routes are backup routes that are placed into the routing table if a primary route is lost. A summary static route aggregates several routes into one, reducing the of the routing table. Standard static routes are manually entered routes into the routing table. Default static routes create a gateway of last resort.'},
+{t:'sw',tag:'Switching',q:'What action takes place when a frame entering a switch has a unicast destination MAC address appearing in the MAC address table?',o:['The switch updates the refresh timer for the entry.','The switch forwards the frame out of the specified port.','The switch purges the entire MAC address table.','The switch replaces the old entry and uses the more current port.'],a:1,exp:'When a switch receives a frame with a destination MAC address that is already in the CAM table, it forwards the frame out only the specific port mapped to that address — no flooding occurs.'},
+{t:'ro',tag:'Routing',q:'The exhibit shows two PCs called PC A and PC B, two routes called R1 and R2, and two switches. PC A has the address 172.16.1.1/24 and is connected to a switch and into an interface on R1 that has the IP address 172.16.1.254. PC B has the address 172.16.2.1/24 and is connected to a switch that is connected to another interface on R1 with the IP address 172.16.2.254. The serial interface on R1 has the address 172.16.3.1 and is connected to the serial interface on R2 that has the address 172.16.3.2/24. R2 is connected to the internet cloud. Which command will create a static route on R2 in order to reach PC B?',o:['R2(config)# ip route 172.16.2.1 255.255.255.0 172.16.3.1','R2(config)# ip route 172.16.2.0 255.255.255.0 172.16.2.254','R2(config)# ip route 172.16.2.0 255.255.255.0 172.16.3.1','R2(config)# ip route 172.16.3.0 255.255.255.0 172.16.2.254'],a:2,img:'https://itexamanswers.net/wp-content/uploads/2016/02/i246203v1n1_2107451.jpg',exp:'The correct syntax is:router(config)# ip route destination-network destination-mask {next-hop-ip-address | exit-interface}If the local exit interface instead of the next-hop IP address is used then the route will be displayed as a directly connected route instead of a static route in the routing table. Because the network to be reached is 172.16.2.0 and the next-hop IP address is 172.16.3.1, the command is R2(config)# ip route 172.16.2.0 255.255.255.0 172.16.3.1'},
+{t:'vl',tag:'VLANs & Trunking',q:'What protocol or technology allows data to transmit over redundant switch links?',o:['EtherChannel','DTP','STP','VTP'],a:0,exp:'EtherChannel bundles multiple physical links into one logical link, allowing traffic to flow across all physical interfaces simultaneously. STP treats the bundle as a single link, preventing it from blocking any of the member ports.'},
+{t:'vl',tag:'VLANs & Trunking',q:'Which three hosts will receive ARP requests from host A, assuming that port Fa0/4 on both switches is configured to carry traffic for multiple VLANs? (Choose three.)',o:['host B','host C','host D','host E','host F','host G'],m:true,ma:[1, 2, 4],a:null,img:'https://itexamanswers.net/wp-content/uploads/2017/06/46.jpg',exp:'ARP requests are sent out as broadcasts. That means the ARP request is sent only throughout a specific VLAN. VLAN 1 hosts will only hear ARP requests from hosts on VLAN 1. VLAN 2 hosts will only hear ARP requests from hosts on VLAN 2.'},
+{t:'vl',tag:'VLANs & Trunking',q:'The network administrator configures both switches as displayed. However, host C is unable to ping host D and host E is unable to ping host F. What action should the administrator take to enable this communication?',o:['Associate hosts A and B with VLAN 10 instead of VLAN 1.','Configure either trunk port in the dynamic desirable mode.','Include a router in the topology.','Remove the native VLAN from the trunk.','Add the switchport nonegotiate command to the configuration of SW2.'],a:1,img:'https://itexamanswers.net/wp-content/uploads/2017/03/hinh5.png',exp:'By default, Cisco switch ports use DTP in \'dynamic auto\' mode. If both sides are \'auto\', neither initiates trunking and no trunk forms. Changing one side to \'dynamic desirable\' causes it to actively negotiate, forming the trunk.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What is the effect of entering the shutdown configuration command on a switch?',o:['It enables BPDU guard on a specific port.','It disables an unused port.','It enables portfast on a specific switch interface.','It disables DTP on a non-trunking interface.'],a:1,exp:'The \'shutdown\' interface command administratively disables a switch port, moving it to the \'administratively down\' state. This is best practice for securing unused ports to prevent unauthorized device connections.'},
+{t:'se',tag:'Security',q:'What would be the primary reason an attacker would launch a MAC address overflow attack?',o:['so that the switch stops forwarding traffic','so that legitimate hosts cannot obtain a MAC address','so that the attacker can see frames that are destined for other hosts','so that the attacker can execute arbitrary code on the switch'],a:2,exp:'A MAC address table overflow attack floods the switch with fake source MAC addresses, filling the CAM table. The switch then fails open, flooding all frames out all ports — allowing the attacker to capture traffic intended for other hosts.'},
+{t:'se',tag:'Security',q:'During the AAA process, when will authorization be implemented?',o:['Immediately after successful authentication against an AAA data source','Immediately after AAA accounting and auditing receives detailed reports','Immediately after an AAA client sends authentication information to a centralized server','Immediately after the determination of which resources a user can access'],a:0,exp:'AAA authorization is implemented immediately after the user is authenticated against a specific AAA data source.'},
+{t:'se',tag:'Security',q:'A company security policy requires that all MAC addressing be dynamically learned and added to both the MAC address table and the running configuration on each switch. Which port security configuration will accomplish this?',o:['auto secure MAC addresses','dynamic secure MAC addresses','static secure MAC addresses','sticky secure MAC addresses'],a:3,exp:'With sticky secure MAC addressing, the MAC addresses can be either dynamically learned or manually configured and then stored in the address table and added to the running configuration file. In contrast, dynamic secure MAC addressing provides for dynamically learned MAC addressing that is stored only in the address table.'},
+{t:'wl',tag:'Wireless',q:'Which three Wi-Fi standards operate in the 2.4GHz range of frequencies? (Choose three.)',o:['802.11a','802.11b','802.11g','802.11n','802.11ac'],m:true,ma:[1, 2, 3],a:null,exp:'b and 802.11g operate in the 2.4GHz range, and 802.11n can operate in either the 2.4GHz or the 5GHz range. 802.11a and 802.11ac operate only in the 5GHz range of frequencies.'},
+{t:'vl',tag:'VLANs & Trunking',q:'To obtain an overview of the spanning tree status of a switched network, a network engineer issues the show spanning-tree command on a switch. Which two items of information will this command display? (Choose two.)',o:['The root bridge BID.','The role of the ports in all VLANs.','The status of native VLAN ports.','The number of broadcasts received on each root port.','The IP address of the management VLAN interface.'],m:true,ma:[0, 1],a:null,exp:'\'show spanning-tree\' displays the root bridge BID (to identify which switch is root), the local switch\'s BID and priority, and the role/state of each port (root, designated, alternate, forwarding, blocking) for each VLAN.'},
+{t:'vl',tag:'VLANs & Trunking',q:'Which trunk link will not forward any traffic after the root bridge election process is complete?',o:['Trunk1','Trunk2','Trunk3','Trunk4'],a:1,img:'https://itexamanswers.net/wp-content/uploads/2016/02/i223534v1n1_223534.jpg',exp:'The switch with the lowest MAC address (all same priority/bandwidth) becomes the root. All root bridge ports are designated. Non-root switches select a root port (cheapest path to root). The remaining port on a non-root link becomes alternate/blocking.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'Which method of IPv6 prefix assignment relies on the prefix contained in RA messages?',o:['EUI-64','SLAAC','static','stateful DHCPv6'],a:1,exp:'Stateless Address Autoconfiguration (SLAAC) relies on information received in router advertisement (RA) messages in order to automatically create an IPv6 address. The RA messages contain information such as the network prefix and prefix length, which the host combines with an interface ID in order to make a unique IPv6 unicast address.'},
+{t:'se',tag:'Security',q:'Which two protocols are used to provide server-based AAA authentication? (Choose two.)',o:['802.1x','SSH','SNMP','TACACS+','RADIUS'],m:true,ma:[3, 4],a:null,exp:'Server-based AAA authentication uses an external TACACS or RADIUS authentication server to maintain a username and password database. When a client establishes a connection with an AAA enabled device, the device authenticates the client by querying the authentication servers.'},
+{t:'wl',tag:'Wireless',q:'A network administrator is configuring a WLAN. Why would the administrator disable the broadcast feature for the SSID?',o:['to eliminate outsiders scanning for available SSIDs in the area','to reduce the risk of interference by external devices such as microwave ovens','to reduce the risk of unauthorized APs being added to the network','to provide privacy and integrity to wireless traffic by using encryption'],a:0,exp:'Disabling SSID broadcast (hiding the SSID) means it won\'t appear in wireless scans. While not a strong security measure on its own, it reduces visibility to casual attackers scanning for available networks in the area.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'Which mitigation technique would prevent rogue servers from providing false IP configuration parameters to clients?',o:['implementing port security','turning on DHCP snooping','disabling CDP on edge ports','implementing port-security on edge ports'],a:1,exp:'Like Dynamic ARP Inspection (DAI), IP Source Guard (IPSG) needs to determine the validity of MAC-address-to-IP-address bindings. To do this IPSG uses the bindings database built by DHCP snooping.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A network administrator configures the port security feature on a switch. The security policy specifies that each access port should allow up to two MAC addresses. When the maximum number of MAC addresses is reached, a frame with the unknown source MAC address is dropped and a notification is sent to the syslog server. Which security violation mode should be configured for each access port?',o:['shutdown','restrict','warning','protect'],a:1,exp:'In port security implementation, an interface can be configured for one of three violation modes:Protect– a port security violation causes the interface to drop packets with unknown source addresses and no notification is sent that a security violation has occurred.Restrict– a port security violation causes the interface to drop packets with unknown source addresses and to send a notification that a security violation has occurred.Shutdown– a port security violation causes the interface to immediately become error-disabled and turns off the port LED. No notification is sent that a security violation has occurred.'},
+{t:'os',tag:'HSRP/FHRP',q:'What protocol or technology defines a group of routers, one of them defined as active and another one as standby?',o:['EtherChannel','VTP','HSRP','DTP'],a:2,exp:'HSRP (Hot Standby Router Protocol) defines an active router that forwards traffic and a standby router that monitors the active. If the active fails, the standby automatically takes over using the shared virtual IP and MAC address.'},
+{t:'vl',tag:'VLANs & Trunking',q:'After attempting to enter the configuration that is shown in router RTA, an administrator receives an error and users on VLAN 20 report that they are unable to reach users on VLAN 30. What is causing the problem?',o:['There is no address on Fa0/0 to use as a default gateway.','RTA is using the same subnet for VLAN 20 and VLAN 30.','Dot1q does not support subinterfaces.','The no shutdown command should have been issued on Fa0/0.20 and Fa0/0.30.'],a:1,img:'https://itexamanswers.net/wp-content/uploads/2016/02/sdsfr43f.jpg',exp:'Router-on-a-stick subinterfaces must each be assigned to a unique subnet. Using the same subnet for Fa0/0.20 and Fa0/0.30 creates a routing conflict — the router cannot differentiate between the two VLANs\' traffic.'},
+{t:'vl',tag:'VLANs & Trunking',q:'Which three pairs of trunking modes will establish a functional trunk link between two Cisco switches? (Choose three.)',o:['dynamic auto – dynamic auto','access – trunk','dynamic desirable – trunk','access – dynamic auto','dynamic desirable – dynamic desirable','dynamic desirable – dynamic auto'],m:true,ma:[2, 4, 5],a:null,exp:'DTP trunk negotiation works as follows: \'trunk\' always trunks, \'dynamic desirable\' actively negotiates, \'dynamic auto\' responds but won\'t initiate. Two \'auto\' ports won\'t trunk. \'access\' never trunks.'},
+{t:'ro',tag:'Routing',q:'A technician is configuring a router for a small company with multiple WLANs and doesn’t need the complexity of a dynamic routing protocol. What should be done or checked?',o:['Verify that there is not a default route in any of the edge router routing tables.','Create static routes to all internal networks and a default route to the internet.','Create extra static routes to the same location with an AD of 1.','Check the statistics on the default route for oversaturation.'],a:1,exp:'For a small office with multiple VLANs but no need for dynamic routing protocols, static routes provide a simple, low-overhead solution. A default static route handles Internet-bound traffic while specific static routes handle internal networks.'},
+{t:'wl',tag:'Wireless',q:'A company is deploying a wireless network in the distribution facility in a Boston suburb. The warehouse is quite large and it requires multiple access points to be used. Because some of the company devices still operate at 2.4GHz, the network administrator decides to deploy the 802.11g standard. Which channel assignments on the multiple access points will make sure that the wireless channels are not overlapping?',o:['channels 1, 5, and 9','channels 1, 6, and 11','channels 1, 7, and 13','channels 2, 6, and 10'],a:1,exp:'In the North America domain, 11 channels are allowed for 2.4GHz wireless networking. Among these 11 channels, the combination of channels 1, 6, and 11 are the only non-overlapping channel combination.'},
+{t:'wl',tag:'Wireless',q:'A network administrator of a small advertising company is configuring WLAN security by using the WPA2 PSK method. Which credential do office users need in order to connect their laptops to the WLAN?',o:['the company username and password through Active Directory service','a key that matches the key on the AP','a user passphrase','a username and password configured on the AP'],a:1,exp:'When a WLAN is configured with WPA2 PSK, wireless users must know the pre-shared key to associate and authenticate with the AP.'},
+{t:'st',tag:'STP',q:'What are the possible port roles for ports A, B, C, and D in this RSTP-enabled network?',o:['alternate, designated, root, root','designated, alternate, root, root','alternate, root, designated, root','designated, root, alternate, root'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2020/01/CCNA-2-v7-Modules-5-6-Redundant-Networks-Exam.png',exp:'Because S1 is the root bridge, B is a designated port, and C and D root ports. RSTP supports a new port type, alternate port in discarding state, that can be port A in this scenario.'},
+{t:'ro',tag:'Routing',q:'Which static route would an IT technician enter to create a backup route to the 172.16.1.0 network that is only used if the primary RIP learned route fails?',o:['ip route 172.16.1.0 255.255.255.0 s0/0/0','ip route 172.16.1.0 255.255.255.0 s0/0/0 121','ip route 172.16.1.0 255.255.255.0 s0/0/0 111','ip route 172.16.1.0 255.255.255.0 s0/0/0 91'],a:1,img:'https://itexamanswers.net/wp-content/uploads/2020/01/i282902v1n1_Routing3-1.png',exp:'A backup static route is called a floating static route. A floating static route has an administrative distance greater than the administrative distance of another static route or dynamic route.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What mitigation plan is best for thwarting a DoS attack that is creating a MAC address table overflow?',o:['Disable DTP.','Disable STP.','Enable port security.','Place unused ports in an unused VLAN.'],a:2,exp:'A MAC address (CAM) table overflow attack, buffer overflow, and MAC address spoofing can all be mitigated by configuring port security. A network administrator would typically not want to disable STP because it prevents Layer 2 loops. DTP is disabled to prevent VLAN hopping. Placing unused ports in an unused VLAN prevents unauthorized wired connectivity.'},
+{t:'wl',tag:'Wireless',q:'A network engineer is troubleshooting a newly deployed wireless network that is using the latest 802.11 standards. When users access high bandwidth services such as streaming video, the wireless network performance is poor. To improve performance the network engineer decides to configure a 5 Ghz frequency band SSID and train users to use that SSID for streaming media services. Why might this solution improve the wireless network performance for that type of service?',o:['Requiring the users to switch to the 5 GHz band for streaming media is inconvenient and will result in fewer users accessing these services.','The 5 GHz band has more channels and is less crowded than the 2.4 GHz band, which makes it more suited to streaming multimedia.','The 5 GHz band has a greater range and is therefore likely to be interference-free.','The only users that can switch to the 5 GHz band will be those with the latest wireless NICs, which will reduce usage.'],a:1,exp:'Wireless range is determined by the access point antenna and output power, not the frequency band that is used. In this scenario it is stated that all users have wireless NICs that comply with the latest standard, and so all can access the 5 GHz band. Although some users may find it inconvenient to switch to the 5 Ghz band to access streaming services, it is the greater number of channels, not just fewer users, that will improve network performance.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'Which DHCPv4 message will a client send to accept an IPv4 address that is offered by a DHCP server?',o:['broadcast DHCPACK','broadcast DHCPREQUEST','unicast DHCPACK','unicast DHCPREQUEST'],a:1,exp:'When a DHCP client receives DHCPOFFER messages, it will send a broadcast DHCPREQUEST message for two purposes. First, it indicates to the offering DHCP server that it would like to accept the offer and bind the IP address. Second, it notifies any other responding DHCP servers that their offers are declined.'},
+{t:'os',tag:'HSRP/FHRP',q:'Which destination MAC address is used when frames are sent from the workstation to the default gateway?',o:['MAC address of the virtual router','MAC address of the standby router','MAC addresses of both the forwarding and standby routers','MAC address of the forwarding router'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2019/12/i223091v1n1_223091.png',exp:'The IP address of the virtual router acts as the default gateway for all the workstations. Therefore, the MAC address that is returned by the Address Resolution Protocol to the workstation will be the MAC address of the virtual router.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'After a host has generated an IPv6 address by using the DHCPv6 or SLAAC process, how does the host verify that the address is unique and therefore usable?',o:['The host sends an ICMPv6 echo request message to the DHCPv6 or SLAAC-learned address and if no reply is returned, the address is considered unique.','The host sends an ICMPv6 neighbor solicitation message to the DHCP or SLAAC-learned address and if no neighbor advertisement is returned, the address is considered unique.','The host checks the local neighbor cache for the learned address and if the address is not cached, it it considered unique.','The host sends an ARP broadcast to the local link and if no hosts send a reply, the address is considered unique.'],a:1,exp:'Before a host can actually configure and use an IPv6 address learned through SLAAC or DHCP, the host must verify that no other host is already using that address. To verify that the address is indeed unique, the host sends an ICMPv6 neighbor solicitation to the address. If no neighbor advertisement is returned, the host considers the address to be unique and configures it on the interface.'},
+{t:'sw',tag:'Switching',q:'Which protocol adds security to remote connections?',o:['FTP','HTTP','NetBEUI','POP','SSH'],a:4,exp:'SSH allows a technician to securely connect to a remote network device for monitoring and troubleshooting. HTTP establishes web page requests. FTP manages file transfer. NetBEUI is not routed on the Internet. POP downloads email messages from email servers.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A network administrator is verifying the configuration of inter-VLAN routing. Users complain that PC2 cannot communicate with PC1. Based on the output, what is the possible cause of the problem?',o:['Gi0/0 is not configured as a trunk port.','The command interface GigabitEthernet0/0.5 was entered incorrectly.','There is no IP address configured on the interface Gi0/0.','The no shutdown command is not entered on subinterfaces.','The encapsulation dot1Q 5 command contains the wrong VLAN.'],a:4,img:'https://itexamanswers.net/wp-content/uploads/2020/01/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-44.png',exp:'Router-on-a-stick requires the encapsulation VLAN number on each subinterface to match the actual VLAN assigned to the hosts. A mismatch (e.g., dot1Q 5 instead of dot1Q 20) means the router processes traffic on the wrong VLAN.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A network administrator is configuring inter-VLAN routing on a network. For now, only one VLAN is being used, but more will be added soon. What is the missing parameter that is shown as the highlighted question mark in the graphic?',o:['It identifies the subinterface.','It identifies the VLAN number.','It identifies the native VLAN number.','It identifies the type of encapsulation that is used.','It identifies the number of hosts that are allowed on the interface.'],a:1,exp:'In router-on-a-stick, the \'encapsulation dot1Q [vlan-id]\' command on a subinterface specifies which VLAN that subinterface serves. The highlighted parameter is the VLAN number that ties the subinterface to a specific VLAN.',img:'https://itexamanswers.net/wp-content/uploads/2020/01/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-InterVLAN-Routing-Exam-96.png'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'What network attack seeks to create a DoS for clients by preventing them from being able to obtain a DHCP lease?',o:['IP address spoofing','DHCP starvation','CAM table attack','DHCP spoofing'],a:1,exp:'DCHP starvation attacks are launched by an attacker with the intent to create a DoS for DHCP clients. To accomplish this goal, the attacker uses a tool that sends many DHCPDISCOVER messages in order to lease the entire pool of available IP addresses, thus denying them to legitimate hosts.'},
+{t:'sw',tag:'Switching',q:'If the IP addresses of the default gateway router and the DNS server are correct, what is the configuration problem?',o:['The DNS server and the default gateway router should be in the same subnet.','The IP address of the default gateway router is not contained in the excluded address list.','The default-router and dns-server commands need to be configured with subnet masks.','The IP address of the DNS server is not contained in the excluded address list.'],a:1,img:'https://itexamanswers.net/wp-content/uploads/2016/02/the-IP-addresses-of-the-default-gateway-router-and-the-DNS-server-are-correct-what-is-the-configuration-pr.png',exp:'In this configuration, the excluded address list should include the address that is assigned to the default gateway router. So the command should be ip dhcp excluded-address 192.168.10.1 192.168.10.9.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'A network administrator has added a new subnet to the network and needs hosts on that subnet to receive IPv4 addresses from the DHCPv4 server.What two commands will allow hosts on the new subnet to receive addresses from the DHCP4 server? (Choose two.)',o:['R1(config-if)# ip helper-address 10.2.0.250','R1(config)# interface G0/1','R1(config)# interface G0/0','R2(config-if)# ip helper-address 10.2.0.250','R2(config)# interface G0/0','R1(config-if)# ip helper-address 10.1.0.254'],m:true,ma:[0, 2],a:null,img:'https://itexamanswers.net/wp-content/uploads/2017/07/2017-07-05_183851-1.jpg',exp:'You need the router interface that is connected to the new subnet and the dhcp server address.The ip helper-address command is used to configure a router to be a DHCPv4 relay. The command should be placed on the interface facing the DHCPv4 clients. When the command is applied on the router interface, the interface will receive DHCPv4 broadcast messages and forward them as unicast to the IP address of the DHCPv4 server.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What protocol or technology uses source IP to destination IP as a load-balancing mechanism?',o:['VTP','EtherChannel','DTP','STP'],a:1,exp:'EtherChannel supports multiple load-balancing methods. Source-to-destination IP hashing uses both IP addresses to select the physical link, distributing flows across member links based on traffic pairs.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What protocol should be disabled to help mitigate VLAN attacks?',o:['CDP','ARP','STP','DTP'],a:3,exp:'DTP (Dynamic Trunking Protocol) is exploited in VLAN hopping attacks to automatically negotiate trunks. Disabling DTP with \'switchport nonegotiate\' and manually setting ports to access mode eliminates this attack vector.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What protocol or technology requires switches to be in server mode or client mode?',o:['EtherChannel','STP','VTP','DTP'],a:2,exp:'VTP (VLAN Trunking Protocol) operates in three modes: server (manages and propagates VLANs), client (receives and applies VTP updates but can\'t create VLANs locally), and transparent (manages local VLANs only).'},
+{t:'sw',tag:'Switching',q:'What are two reasons a network administrator would segment a network with a Layer 2 switch? (Choose two.)',o:['to create fewer collision domains','to enhance user bandwidth','to create more broadcast domains','to eliminate virtual circuits','to isolate traffic between segments','to isolate ARP request messages from the rest of the network'],m:true,ma:[1, 4],a:null,exp:'A switch has the ability of creating temporary point-to-point connections between the directly-attached transmitting and receiving network devices. The two devices have full-bandwidth full-duplex connectivity during the transmission.'},
+{t:'ro',tag:'Routing',q:'What command will enable a router to begin sending messages that allow it to configure a link-local address without using an IPv6 DHCP server?',o:['a static route','the ipv6 route ::/0 command','the ipv6 unicast-routing command','the ip routing command'],a:2,exp:'To enable IPv6 on a router you must use the ipv6 unicast-routing global configuration command or use the ipv6 enable interface configuration command. This is equivalent to entering ip routing to enable IPv4 routing on a router when it has been turned off. Keep in mind that IPv4 is enabled on a router by default. IPv6 is not enabled by default.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A network administrator is using the router-on-a-stick model to configure a switch and a router for inter-VLAN routing. What configuration should be made on the switch port that connects to the router?',o:['Configure it as a trunk port and allow only untagged traffic.','Configure the port as an access port and a member of VLAN1.','Configure the port as an 802.1q trunk port.','Configure the port as a trunk port and assign it to VLAN1.'],a:2,exp:'The port on the switch that connects to the router interface should be configured as a trunk port. Once it becomes a trunk port, it does not belong to any particular VLAN and will forward traffic from various VLANs.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What are three techniques for mitigating VLAN attacks? (Choose three.)',o:['Use private VLANs.','Enable BPDU guard.','Enable trunking manually','Enable Source Guard.','Disable DTP.','Set the native VLAN to an unused VLAN.'],m:true,ma:[2, 4, 5],a:null,exp:'Mitigating a VLAN attack can be done by disabling Dynamic Trunking Protocol (DTP), manually setting ports to trunking mode, and by setting the native VLAN of trunk links to VLANs not in use.'},
+{t:'sw',tag:'Switching',q:'In which situation would a technician use the show interfaces switch command?',o:['to determine if remote access is enabled','when packets are being dropped from a particular directly attached host','when an end device can reach local devices, but not remote devices','to determine the MAC address of a directly attached network device on a particular interface'],a:1,exp:'The show interfaces command is useful to detect media errors, to see if packets are being sent and received, and to determine if any runts, giants, CRCs, interface resets, or other errors have occurred. Problems with reachability to a remote network would likely be caused by a misconfigured default gateway or other routing issue, not a switch issue. The show mac address-table command shows the MAC address of a directly attached device.'},
+{t:'se',tag:'Security',q:'What is a drawback of the local database method of securing device access that can be solved by using AAA with centralized servers?',o:['There is no ability to provide accountability.','User accounts must be configured locally on each device, which is an unscalable authentication solution.','It is very susceptible to brute-force attacks because there is no username.','The passwords can only be stored in plain text in the running configuration.'],a:1,exp:'The local database method of securing device access utilizes usernames and passwords that are configured locally on the router. This allows administrators to keep track of who logged in to the device and when. The passwords can also be encrypted in the configuration. However, the account information must be configured on each device where that account should have access, making this solution very difficult to scale.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'What action does a DHCPv4 client take if it receives more than one DHCPOFFER from multiple DHCP servers?',o:['It sends a DHCPREQUEST that identifies which lease offer the client is accepting.','It sends a DHCPNAK and begins the DHCP process over again.','It discards both offers and sends a new DHCPDISCOVER.','It accepts both DHCPOFFER messages and sends a DHCPACK.'],a:0,exp:'When a DHCP client receives multiple DHCPOFFER messages from different servers, it accepts the first one received and sends a broadcast DHCPREQUEST identifying the chosen server. Other servers see the broadcast and withdraw their offers.'},
+{t:'vl',tag:'VLANs & Trunking',q:'The network administrator is configuring the port security feature on switch SWC. The administrator issued the command show port-security interface fa 0/2 to verify the configuration. What can be concluded from the output that is shown? (Choose three.)',o:['Three security violations have been detected on this interface.','This port is currently up.','The port is configured as a trunk link.','Security violations will cause this port to shut down immediately.','There is no device currently connected to this port.','The switch port mode for this interface is access mode.'],m:true,ma:[1, 3, 5],a:null,img:'https://itexamanswers.net/wp-content/uploads/2019/12/112_2022-06-24_113833.jpg',exp:'Because the security violation count is at 0, no violation has occurred. The system shows that 3 MAC addresses are allowed on port fa0/2, but only one has been configured and no sticky MAC addresses have been learned. The port is up because of the port status of secure-up. The violation mode is what happens when an unauthorized device is attached to the port. A port must be in access mode in order to activate and use port security.'},
+{t:'wl',tag:'Wireless',q:'What method of wireless authentication is dependent on a RADIUS authentication server?',o:['WEP','WPA Personal','WPA2 Personal','WPA2 Enterprise'],a:3,exp:'WPA2 Enterprise uses 802.1X authentication with a RADIUS server, requiring each user to authenticate with individual credentials. This is more secure than WPA2 Personal (PSK) because compromising one credential doesn\'t expose all users.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A network administrator has found a user sending a double-tagged 802.1Q frame to a switch. What is the best solution to prevent this type of attack?',o:['The native VLAN number used on any trunk should be one of the active data VLANs.','The VLANs for user access ports should be different VLANs than any native VLANs used on trunk ports.','Trunk ports should be configured with port security.','Trunk ports should use the default VLAN as the native VLAN number.'],a:1,exp:'Double-tagging attacks work when the attacker\'s native VLAN matches the trunk\'s native VLAN. The fix is to ensure user-facing access ports use VLANs that never match any trunk\'s native VLAN, so double-tagged frames can\'t reach target VLANs.'},
+{t:'ec',tag:'EtherChannel',q:'Which two conclusions can be drawn from the output? (Choose two.)',o:['The EtherChannel is down.','The port channel ID is 2.','The port channel is a Layer 3 channel.','The bundle is fully operational.','The load-balancing method used is source port to destination port.'],m:true,ma:[0, 1],a:null,img:'https://itexamanswers.net/wp-content/uploads/2017/03/i221267v1n1_item2.jpg',exp:'The output shows the port channel in a \'D - down\' state, and the interface identifier is \'Po2\' indicating port channel ID 2. The bundle is not operational because the protocol state is down.'},
+{t:'wl',tag:'Wireless',q:'On a Cisco 3504 WLC Summary page ( Advanced > Summary ), which tab allows a network administrator to configure a particular WLAN with a WPA2 policy?',o:['WLANs','SECURITY','WIRELESS','MANAGEMENT'],a:0,exp:'TheWLANstab in the Cisco 3504 WLC advancedSummarypage allows a user to access the configuration of WLANs including security, QoS, and policy-mapping.'},
+{t:'ro',tag:'Routing',q:'A network engineer is configuring IPv6 routing on the network. Which command issued on router HQ will configure a default route to the Internet to forward packets to an IPv6 destination network that is not listed in the routing table?​',o:['ipv6 route ::/0 serial 0/0/0','ip route 0.0.0.0 0.0.0.0 serial 0/1/1','ipv6 route ::1/0 serial 0/1/1','ipv6 route ::/0 serial 0/1/1'],a:3,exp:'The IPv6 default static route uses \'::/0\' as the destination (equivalent to 0.0.0.0/0 in IPv4). Combined with the correct exit interface (Serial 0/1/1 toward the ISP), this routes all unmatched IPv6 traffic to the Internet.',img:'https://itexamanswers.net/wp-content/uploads/2020/01/2020-04-28_073221.jpg'},
+{t:'ro',tag:'Routing',q:'Users are complaining of sporadic access to the internet every afternoon. What should be done or checked?',o:['Create static routes to all internal networks and a default route to the internet.','Verify that there is not a default route in any of the edge router routing tables.','Create a floating static route to that network.','Check the statistics on the default route for oversaturation.'],a:3,exp:'Sporadic Internet issues that occur at the same time each day suggest the default route\'s interface is becoming saturated during peak usage. Checking interface statistics for drops, errors, or bandwidth utilization will confirm oversaturation.'},
+{t:'sw',tag:'Switching',q:'What action takes place when the source MAC address of a frame entering a switch appears in the MAC address table associated with a different port?',o:['The switch purges the entire MAC address table.','The switch replaces the old entry and uses the more current port.','The switch updates the refresh timer for the entry.','The switch forwards the frame out of the specified port.'],a:1,exp:'When a switch receives a frame from a source MAC address already in the CAM table but associated with a different port, it updates the entry with the new port. This handles devices that move between ports or MAC address changes.'},
+{t:'wl',tag:'Wireless',q:'A network administrator is configuring a WLAN. Why would the administrator use a WLAN controller?',o:['to centralize management of multiple WLANs','to provide privacy and integrity to wireless traffic by using encryption','to facilitate group configuration and management of multiple WLANs through a WLC','to provide prioritized service for time-sensitive applications'],a:2,exp:'A Wireless LAN Controller (WLC) provides centralized management for multiple lightweight APs. Configuration, firmware updates, and WLAN policies are pushed from the WLC to all associated APs simultaneously.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A new Layer 3 switch is connected to a router and is being configured for interVLAN routing. What are three of the five steps required for the configuration? (Choose three.)Case 7 (NEW):',o:['creating SVI interfaces','adjusting the route metric','enabling IP routing','assigning ports to VLANs','deleting the default VLAN','assigning the ports to the native VLAN','modifying the default VLAN'],m:true,ma:[0, 2, 3],a:null,exp:'Steps to configure Layer 3 switch to route with a router:Step 1. Configure the routed port.Step 2. Enable routing.Step 3. Configure routing.Step 4. Verify routing.Step 5. Verify connectivity.Reference:4.3.8 Packet Tracer Configure Layer 3 Switching and inter VLAN Routing'},
+{t:'sw',tag:'Switching',q:'Which three statements accurately describe duplex and speed settings on Cisco 2960 switches? (Choose three.)',o:['An autonegotiation failure can result in connectivity issues.','When the speed is set to 1000 Mb/s, the switch ports will operate in full-duplex mode.','The duplex and speed settings of each switch port can be manually configured.','Enabling autonegotiation on a hub will prevent mismatched port speeds when connecting the hub to the switch.','By default, the speed is set to 100 Mb/s and the duplex mode is set to autonegotiation.','By default, the autonegotiation feature is disabled.'],m:true,ma:[0, 1, 2],a:null,exp:'Cisco 2960 switches support autonegotiation by default on all ports. When autonegotiation fails (e.g., one side is hard-coded), duplex mismatches occur causing poor performance. At 1 Gbps, full-duplex is required by the standard.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A network administrator configures R1 for inter-VLAN routing between VLAN 10 and VLAN 20. However, the devices in VLAN 10 and VLAN 20 cannot communicate. Based on the configuration in the exhibit, what is a possible cause for the problem?',o:['The port Gi0/0 should be configured as trunk port.','The encapsulation is misconfigured on a subinterface.','A no shutdown command should be added in each subinterface configuration.','The command interface gigabitEthernet 0/0.1 is wrong.'],a:1,img:'https://itexamanswers.net/wp-content/uploads/2020/01/2021-12-19_221231.jpg',exp:'The encapsulation command on a subinterface must reference the correct VLAN number matching the switch\'s VLAN assignment. If Gi0/0.10 has \'encapsulation dot1Q 20\' instead of dot1Q 10, hosts in VLAN 10 cannot communicate through it.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A network administrator uses the spanning-tree portfast bpduguard default global configuration command to enable BPDU guard on a switch. However, BPDU guard is not activated on all access ports. What is the cause of the issue?',o:['BPDU guard needs to be activated in the interface configuration command mode.','Access ports configured with root guard cannot be configured with BPDU guard.','Access ports belong to different VLANs.','PortFast is not configured on all access ports.'],a:3,exp:'The global command \'spanning-tree portfast bpduguard default\' only enables BPDU guard on ports that already have PortFast enabled. Ports without PortFast configured will not get BPDU guard applied automatically.'},
+{t:'st',tag:'STP',q:'Which two types of spanning tree protocols can cause suboptimal traffic flows because they assume only one spanning-tree instance for the entire bridged network? (Choose two.)',o:['MSTP','RSTP','Rapid PVST+','PVST+','STP'],m:true,ma:[1, 4],a:null,exp:'Traditional STP (802.1D) and RSTP (802.1w) maintain a single spanning-tree instance for the entire network regardless of VLAN count. This forces all VLANs to use the same blocked/forwarding ports, which can be suboptimal for load balancing.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'A network administrator is configuring the router R1 for IPv6 address assignment. Based on the partial configuration, which IPv6 global unicast address assignment scheme does the administrator intend to implement?',o:['stateful','stateless','manual configuration','SLAAC'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2020/01/i282171v1n1_282171.png',exp:'The \'ipv6 dhcp server\' command combined with a pool that has an \'address prefix\' command indicates stateful DHCPv6. In stateful mode, the server assigns and tracks full IPv6 addresses — unlike stateless where clients use SLAAC for the address.'},
+{t:'wl',tag:'Wireless',q:'A WLAN engineer deploys a WLC and five wireless APs using the CAPWAP protocol with the DTLS feature to secure the control plane of the network devices. While testing the wireless network, the WLAN engineer notices that data traffic is being exchanged between the WLC and the APs in plain-text and is not being encrypted. What is the most likely reason for this?',o:['DTLS only provides data security through authentication and does not provide encryption for data moving between a wireless LAN controller (WLC) and an access point (AP).','Although DTLS is enabled by default to secure the CAPWAP control channel, it is disabled by default for the data channel.','DTLS is a protocol that only provides security between the access point (AP) and the wireless client.','Data encryption requires a DTLS license to be installed on each access point (AP) prior to being enabled on the wireless LAN controller (WLC).'],a:1,exp:'TLS is a protocol which provides security between the AP and the WLC. It allows them to communicate using encryption and prevents eavesdropping or tampering.DTLS is enabled by default to secure the CAPWAP control channel but is disabled by default for the data channel. All CAPWAP management and control traffic exchanged between an AP and WLC is encrypted and secured by default to provide control plane privacy and prevent Man-In-the-Middle (MITM) attacks.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A new switch is to be added to an existing network in a remote office. The network administrator does not want the technicians in the remote office to be able to add new VLANs to the switch, but the switch should receive VLAN updates from the VTP domain. Which two steps must be performed to configure VTP on the new switch to meet these conditions? (Choose two.)',o:['Configure the new switch as a VTP client.','Configure the existing VTP domain name on the new switch.','Configure an IP address on the new switch.','Configure all ports of both switches to access mode.','Enable VTP pruning.'],m:true,ma:[0, 1],a:null,exp:'Before the switch is put in the correct VTP domain and in client mode, the switch must be connected to any other switch in the VTP domain through a trunk in order to receive/transmit VTP information.'},
+{t:'sw',tag:'Switching',q:'Consider that the main power has just been restored. PC3 issues a broadcast IPv4 DHCP request. To which port will SW1 forward this request?​',o:['to Fa0/1, Fa0/2, and Fa0/3 only','to Fa0/1, Fa0/2, Fa0/3, and Fa0/4','to Fa0/1 only​','to Fa0/1, Fa0/2, and Fa0/4 only​','to Fa0/1 and Fa0/2 only'],a:0,exp:'When a switch first powers on, its MAC address table is empty. A broadcast frame (like DHCP Discover) is flooded out all ports except the one it arrived on — in this case Fa0/1, Fa0/2, and Fa0/3 (not the incoming Fa0/4).',img:'https://itexamanswers.net/wp-content/uploads/2020/01/i245718v1n1_1.png'},
+{t:'sw',tag:'Switching',q:'What action takes place when the source MAC address of a frame entering a switch is not in the MAC address table?',o:['The switch forwards the frame out of the specified port.','The switch will forward the frame out all ports except the incoming port.','The switch adds the MAC address and incoming port number to the table.','The switch adds a MAC address table entry mapping for the destination MAC address and the ingress port.'],a:2,exp:'When a switch receives a frame with a source MAC address not in the CAM table, it adds an entry mapping that MAC address to the incoming port number. This is how the switch dynamically builds its forwarding table.'},
+{t:'ro',tag:'Routing',q:'Employees are unable to connect to servers on one of the internal networks. What should be done or checked?',o:['Use the “show ip interface brief” command to see if an interface is down.','Verify that there is not a default route in any of the edge router routing tables.','Create static routes to all internal networks and a default route to the internet.','Check the statistics on the default route for oversaturation.'],a:0,exp:'\'show ip interface brief\' shows the IP address and line/protocol status of all interfaces. A down interface explains why hosts on that segment can\'t reach servers — without a working gateway interface, routing fails for that subnet.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What is the effect of entering the ip dhcp snooping configuration command on a switch?',o:['It enables DHCP snooping globally on a switch.','It enables PortFast globally on a switch.','It disables DTP negotiations on trunking ports.','It manually enables a trunk link.'],a:0,exp:'\'ip dhcp snooping\' enables DHCP snooping globally on the switch. This alone doesn\'t activate it on any VLAN — you must also use \'ip dhcp snooping vlan [id]\' to enable it per VLAN, and configure trusted/untrusted ports.'},
+{t:'ro',tag:'Routing',q:'An administrator notices that large numbers of packets are being dropped on one of the branch routers. What should be done or checked?',o:['Create static routes to all internal networks and a default route to the internet.','Create extra static routes to the same location with an AD of 1.','Check the statistics on the default route for oversaturation.','Check the routing table for a missing static route.'],a:3,exp:'When packets are being dropped at a branch router, the most likely cause is a missing or misconfigured static route. The routing table may lack an entry for the destination network, causing the router to drop packets with no match.'},
+{t:'sw',tag:'Switching',q:'What are two switch characteristics that could help alleviate network congestion? (Choose two.)',o:['fast internal switching','large frame buffers','store-and-forward switching','low port density','frame check sequence (FCS) check'],m:true,ma:[0, 1],a:null,exp:'Fast internal switching fabrics allow a switch to move frames between ports at wire speed without creating bottlenecks. Large frame buffers prevent packet loss during microbursts by temporarily storing frames when ports are momentarily congested.'},
+{t:'sw',tag:'Switching',q:'What is a result of connecting two or more switches together?',o:['The number of broadcast domains is increased.','The size of the broadcast domain is increased.','The number of collision domains is reduced.','The size of the collision domain is increased.'],a:1,exp:'When two or more switches are connected together, the size of the broadcast domain is increased and so is the number of collision domains. The number of broadcast domains is increased only when routers are added.'},
+{t:'ro',tag:'Routing',q:'Branch users were able to access a site in the morning but have had no connectivity with the site since lunch time. What should be done or checked?',o:['Verify that the static route to the server is present in the routing table.','Use the “show ip interface brief” command to see if an interface is down.','Check the configuration on the floating static route and adjust the AD.','Create a floating static route to that network.'],a:0,exp:'Intermittent connectivity that worked earlier but now fails suggests a route that existed before has been removed or the destination has become unreachable. Verifying the routing table confirms whether the static route to the server is still present.'},
+{t:'se',tag:'Security',q:'What is the effect of entering the switchport port-security configuration command on a switch?',o:['It dynamically learns the L2 address and copies it to the running configuration.','It enables port security on an interface.','It enables port security globally on the switch.','It restricts the number of discovery messages, per second, to be received on the interface.'],a:1,exp:'\'switchport port-security\' (without additional parameters) enables port security on the interface with default settings: max 1 MAC address, shutdown violation mode. Additional commands configure the specific behavior.'},
+{t:'wl',tag:'Wireless',q:'A network administrator is configuring a WLAN. Why would the administrator use multiple lightweight APs?',o:['to centralize management of multiple WLANs','to monitor the operation of the wireless network','to provide prioritized service for time-sensitive applications','to facilitate group configuration and management of multiple WLANs through a WLC'],a:3,exp:'Lightweight APs (LAPs) offload configuration and management to the WLC. All WLAN policies, channel assignments, and firmware are managed centrally on the WLC and pushed to LAPs — simplifying large-scale wireless deployments.'},
+{t:'vl',tag:'VLANs & Trunking',q:'PC-A and PC-B are both in VLAN 60. PC-A is unable to communicate with PC-B. What is the problem?',o:['The native VLAN should be VLAN 60.','The native VLAN is being pruned from the link.','The trunk has been configured with the switchport nonegotiate command.','The VLAN that is used by PC-A is not in the list of allowed VLANs on the trunk.'],a:3,img:'https://itexamanswers.net/wp-content/uploads/2016/02/i211586v1n1_Question-5.png',exp:'Because PC-A and PC-B are connected to different switches, traffic between them must flow over the trunk link. Trunks can be configured so that they only allow traffic for particular VLANs to cross the link. In this scenario, VLAN 60, the VLAN that is associated with PC-A and PC-B, has not been allowed across the link, as shown by the output of show interfaces trunk.'},
+{t:'wl',tag:'Wireless',q:'A network administrator is configuring a WLAN. Why would the administrator use RADIUS servers on the network?',o:['to centralize management of multiple WLANs','to restrict access to the WLAN by authorized, authenticated users only','to facilitate group configuration and management of multiple WLANs through a WLC','to monitor the operation of the wireless network'],a:1,exp:'RADIUS servers provide centralized authentication for WPA2 Enterprise (802.1X) wireless networks. Only users with valid credentials stored on the RADIUS server (or passed to Active Directory) are allowed to associate with the WLAN.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What is the effect of entering the switchport mode access configuration command on a switch?',o:['It enables BPDU guard on a specific port.','It manually enables a trunk link.','It disables an unused port.','It disables DTP on a non-trunking interface.'],a:3,exp:'\'switchport mode access\' explicitly sets a port to access mode and also disables DTP negotiation on that port, preventing it from being tricked into forming a trunk — an important security hardening step.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'A network administrator has configured a router for stateless DHCPv6 operation. However, users report that workstations are not receiving DNS server information. Which two router configuration lines should be verified to ensure that stateless DHCPv6 service is properly configured? (Choose two.)',o:['The domain-name line is included in theipv6 dhcp poolsection.','The dns-server line is included in theipv6 dhcp poolsection.','Theipv6 nd other-config-flagis entered for the interface that faces the LAN segment.','The address prefix line is included in theipv6 dhcp poolsection.','Theipv6 nd managed-config-flagis entered for the interface that faces the LAN segment.'],m:true,ma:[1, 2],a:null,exp:'To use the stateless DHCPv6 method, the router must inform DHCPv6 clients to configure a SLAAC IPv6 address and contact the DHCPv6 server for additional configuration parameters, such as the DNS server address. This is done through the commandipv6 nd other-config-flagentered at the interface configuration mode. The DNS server address is indicated in theipv6 dhcp poolconfiguration.'},
+{t:'wl',tag:'Wireless',q:'A network administrator is configuring a WLAN. Why would the administrator disable the broadcast feature for the SSID?',o:['to eliminate outsiders scanning for available SSIDs in the area','to centralize management of multiple WLANs','to facilitate group configuration and management of multiple WLANs through a WLC','to provide prioritized service for time-sensitive applications'],a:0,exp:'SSID broadcast suppression prevents the network name from appearing in wireless scans. Legitimate users can still connect by manually entering the SSID, but casual attackers won\'t see it when scanning for networks.'},
+{t:'ro',tag:'Routing',q:'An administrator is attempting to install an IPv6 static route on router R1 to reach the network attached to router R2. After the static route command is entered, connectivity to the network is still failing. What error has been made in the static route configuration?',o:['The next hop address is incorrect.','The interface is incorrect.','The destination network is incorrect.','The network prefix is incorrect.'],a:1,img:'https://itexamanswers.net/wp-content/uploads/2019/12/2020-01-17_100010.jpg',exp:'In this example the interface in the static route is incorrect. The interface should be the exit interface on R1, which is s0/0/0.'},
+{t:'sw',tag:'Switching',q:'What action takes place when a frame entering a switch has a unicast destination MAC address that is not in the MAC address table?',o:['The switch updates the refresh timer for the entry.','The switch resets the refresh timer on all MAC address table entries.','The switch replaces the old entry and uses the more current port.','The switch will forward the frame out all ports except the incoming port.'],a:3,exp:'When a switch receives a unicast frame whose destination MAC is not in the CAM table, it floods the frame out all ports except the incoming port. This is called \'unknown unicast flooding\' and is normal switch behavior.'},
+{t:'ro',tag:'Routing',q:'A junior technician was adding a route to a LAN router. A traceroute to a device on the new network revealed a wrong path and unreachable status. What should be done or checked?',o:['Create a floating static route to that network.','Check the configuration on the floating static route and adjust the AD.','Check the configuration of the exit interface on the new static route.','Verify that the static route to the server is present in the routing table.'],a:2,exp:'A traceroute showing a wrong path indicates the static route is pointing to an incorrect next-hop or exit interface. Verifying the routing table entry and the exit interface configuration will identify the misconfiguration.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What is the effect of entering the ip arp inspection vlan 10 configuration command on a switch?',o:['It specifies the maximum number of L2 addresses allowed on a port.','It enables DAI on specific switch interfaces previously configured with DHCP snooping.','It enables DHCP snooping globally on a switch.','It globally enables BPDU guard on all PortFast-enabled ports.'],a:1,exp:'\'ip arp inspection vlan 10\' enables Dynamic ARP Inspection on VLAN 10. DAI intercepts ARP packets and validates them against the DHCP snooping binding table, dropping ARP packets with invalid IP-to-MAC mappings.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What protocol or technology manages trunk negotiations between switches?',o:['VTP','EtherChannel','DTP','STP'],a:2,exp:'DTP (Dynamic Trunking Protocol) is a Cisco-proprietary protocol that automatically negotiates trunk links between switches. It is enabled by default on Cisco switches and manages whether a link operates as trunk or access.'},
+{t:'wl',tag:'Wireless',q:'A network administrator is configuring a WLAN. Why would the administrator apply WPA2 with AES to the WLAN?',o:['to reduce the risk of unauthorized APs being added to the network','to centralize management of multiple WLANs','to provide prioritized service for time-sensitive applications','to provide privacy and integrity to wireless traffic by using encryption'],a:3,exp:'WPA2 with AES uses CCMP (Counter Mode with CBC-MAC Protocol) encryption, providing strong data confidentiality, integrity, and authentication for wireless traffic. It is the recommended standard for securing production WLANs.'},
+{t:'ro',tag:'Routing',q:'Users on a LAN are unable to get to a company web server but are able to get elsewhere. What should be done or checked?',o:['Ensure that the old default route has been removed from the company edge routers.','Verify that the static route to the server is present in the routing table.','Check the configuration on the floating static route and adjust the AD.','Create a floating static route to that network.'],a:1,exp:'When users can reach some network resources but not a specific server, the most likely cause is a missing static route to that server\'s subnet. The routing table should have an explicit route for the server\'s network.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'What IPv6 prefix is designed for link-local communication?',o:['2001::/3','ff00::/8','fc::/07','fe80::/10'],a:3,exp:'The fe80::/10 prefix is reserved for IPv6 link-local addresses. These addresses are automatically configured on every IPv6-enabled interface and are only valid on the local link — they cannot be routed beyond a single network segment.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'What is the effect of entering theip dhcp snooping limit rate 6configuration command on a switch?',o:['It displays the IP-to-MAC address associations for switch interfaces.','It enables port security globally on the switch.','It restricts the number of discovery messages, per second, to be received on the interface.','It dynamically learns the L2 address and copies it to the running configuration.'],a:2,exp:'\'ip dhcp snooping limit rate 6\' restricts the number of DHCP messages processed per second on an interface to 6. This rate limiting prevents DHCP starvation attacks that flood the switch with DHCP Discover messages.'},
+{t:'wl',tag:'Wireless',q:'A network administrator is configuring a WLAN. Why would the administrator change the default DHCP IPv4 addresses on an AP?',o:['to eliminate outsiders scanning for available SSIDs in the area','to reduce the risk of unauthorized APs being added to the network','to reduce outsiders intercepting data or accessing the wireless network by using a well-known address range','to reduce the risk of interference by external devices such as microwave ovens'],a:2,exp:'The default DHCP address range on most APs (e.g., 192.168.1.0/24) is widely known. Changing it to a non-default range makes it harder for unauthorized users who associate with the AP to know the correct address space.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What is the effect of entering the ip arp inspection validate src-mac configuration command on a switch?',o:['It checks the source L2 address in the Ethernet header against the sender L2 address in the ARP body.','It disables all trunk ports.','It displays the IP-to-MAC address associations for switch interfaces.','It enables portfast on a specific switch interface.'],a:0,exp:'\'ip arp inspection validate src-mac\' adds an extra DAI check that compares the source MAC address in the Ethernet frame header against the sender MAC address in the ARP message body. Mismatches indicate ARP spoofing.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What protocol or technology is a Cisco proprietary protocol that is automatically enabled on 2960 switches?',o:['DTP','STP','VTP','EtherChannel'],a:0,exp:'DTP (Dynamic Trunking Protocol) is Cisco-proprietary and enabled by default on Cisco Catalyst switches including the 2960 series. It automatically negotiates trunk links between Cisco switches without manual configuration.'},
+{t:'ro',tag:'Routing',q:'What address and prefix length is used when configuring an IPv6 default static route?',o:['::/0','FF02::1/8','0.0.0.0/0','::1/128'],a:0,exp:'In IPv6, the default static route uses \'::/0\' as the destination network and prefix length. This is equivalent to the IPv4 default route 0.0.0.0/0 and matches all IPv6 destinations not found in the routing table.'},
+{t:'ro',tag:'Routing',q:'What are two characteristics of Cisco Express Forwarding (CEF)? (Choose two.)',o:['When a packet arrives on a router interface, it is forwarded to the control plane where the CPU matches the destination address with a matching routing table entry.','This is the fastest forwarding mechanism on Cisco routers and multilayer switches.','With this switching method, flow information for a packet is stored in the fast-switching cache to forward future packets to the same destination without CPU intervention.','Packets are forwarded based on information in the FIB and an adjacency table.','When a packet arrives on a router interface, it is forwarded to the control plane where the CPU searches for a match in the fast-switching cache.'],m:true,ma:[1, 3],a:null,exp:'CEF (Cisco Express Forwarding) is the fastest forwarding mechanism, using a pre-built FIB (Forwarding Information Base) and adjacency table derived from the routing and ARP tables. It eliminates per-packet route lookups entirely.'},
+{t:'sw',tag:'Switching',q:'Which term describes the role of a Cisco switch in the 802.1X port-based access control?',o:['agent','supplicant','authenticator','authentication server'],a:2,exp:'In 802.1X port-based access control, the switch acts as the authenticator — it controls network access and communicates between the supplicant (end device) and the authentication server (RADIUS). The switch enforces the access decision.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'Which Cisco solution helps prevent ARP spoofing and ARP poisoning attacks?',o:['Dynamic ARP Inspection','IP Source Guard','DHCP Snooping','Port Security'],a:0,exp:'Dynamic ARP Inspection (DAI) prevents ARP spoofing by validating ARP packets against the DHCP snooping binding table. Only ARP packets with valid MAC-to-IP mappings are forwarded; all others are dropped.'},
+{t:'st',tag:'STP',q:'What is an advantage of PVST+?',o:['PVST+ optimizes performance on the network through autoselection of the root bridge.','PVST+ reduces bandwidth consumption compared to traditional implementations of STP that use CST.','PVST+ requires fewer CPU cycles for all the switches in the network.','PVST+ optimizes performance on the network through load sharing.'],a:3,exp:'PVST+ results in optimum load balancing. However, this is accomplished by manually configuring switches to be elected as root bridges for different VLANs on the network. The root bridges are not automatically selected. Furthermore, having spanning-tree instances for each VLAN actually consumes more bandwidth and it increases the CPU cycles for all the switches in the network.'},
+{t:'os',tag:'HSRP/FHRP',q:'What protocol or technology uses a standby router to assume packet-forwarding responsibility if the active router fails?',o:['EtherChannel','DTP','HSRP','VTP'],a:2,exp:'HSRP uses an active/standby model. The standby router monitors the active router via hello messages. If the active fails and hello messages stop, the standby waits through the hold-down timer and then assumes the active role.'},
+{t:'vl',tag:'VLANs & Trunking',q:'What is the effect of entering the show ip dhcp snooping binding configuration command on a switch?',o:['It switches a trunk port to access mode.','It checks the source L2 address in the Ethernet header against the sender L2 address in the ARP body.','It restricts the number of discovery messages, per second, to be received on the interface.','It displays the IP-to-MAC address associations for switch interfaces.'],a:3,exp:'\'show ip dhcp snooping binding\' displays the DHCP snooping binding table, which maps MAC addresses to IP addresses, VLANs, lease times, and port numbers. This table is also used by DAI to validate ARP packets.'},
+{t:'sw',tag:'Switching',q:'What action takes place when the source MAC address of a frame entering a switch is in the MAC address table?',o:['The switch forwards the frame out of the specified port.','The switch updates the refresh timer for the entry.','The switch replaces the old entry and uses the more current port.','The switch adds a MAC address table entry for the destination MAC address and the egress port.'],a:1,exp:'When a switch receives a frame and the source MAC address is already in the CAM table associated with the same incoming port, the switch simply refreshes (resets) the aging timer for that entry to prevent it from expiring.'},
+{t:'sw',tag:'Switching',q:'A small publishing company has a network design such that when a broadcast is sent on the LAN, 200 devices receive the transmitted broadcast. How can the network administrator reduce the number of devices that receive broadcast traffic?',o:['Add more switches so that fewer devices are on a particular switch.','Replace the switches with switches that have more ports per switch. This will allow more devices on a particular switch.','Segment the LAN into smaller LANs and route between them.','Replace at least half of the switches with hubs to reduce the size of the broadcast domain.'],a:2,exp:'By dividing the one big network into two smaller network, the network administrator has created two smaller broadcast domains. When a broadcast is sent on the network now, the broadcast will only be sent to the devices on the same Ethernet LAN. The other LAN will not receive the broadcast.'},
+{t:'ro',tag:'Routing',q:'What defines a host route on a Cisco router?',o:['The link-local address is added automatically to the routing table as an IPv6 host route.','An IPv4 static host route configuration uses a destination IP address of a specific device and a /32 subnet mask.','A host route is designated with a C in the routing table.','A static IPv6 host route must include the interface type and the interface number of the next hop router.'],a:1,exp:'A host route is an IPv4 address with a 32-bit mask, or an IPv6 address with a 128-bit mask. When an active interface on a router is configured with an IPv4 or IPv6 address, a local host route is automatically added to the routing table. A host route is marked with L in the output of the routing table. For IPv6 static routes, the next-hop address can be the link-local address of the adjacent router. In this case you must specify the interface type and the interface number of the local router.'},
+{t:'ro',tag:'Routing',q:'What else is required when configuring an IPv6 static route using a next-hop link-local address?',o:['administrative distance','ip address of the neighbor router','network number and subnet mask on the interface of the neighbor router','interface number and type'],a:3,exp:'When an IPv6 static route uses a link-local address as the next-hop, the router cannot determine which interface to use because link-local addresses are not unique across different links. You must specify the exit interface type and number.'},
+{t:'wl',tag:'Wireless',q:'A technician is configuring a wireless network for a small business using a SOHO wireless router. Which two authentication methods are used, if the router is configured with WPA2? (Choose two.)',o:['personal','AES','TKIP','WEP','enterprise'],m:true,ma:[0, 4],a:null,exp:'WPA2 supports two authentication modes: Personal (PSK) uses a pre-shared passphrase suitable for home/small office; Enterprise uses 802.1X with a RADIUS server for individual user authentication, suitable for corporate networks.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'Which mitigation technique would prevent rogue servers from providing false IPv6 configuration parameters to clients?',o:['enabling DHCPv6 Guard','enabling RA Guard','implementing port security on edge ports','disabling CDP on edge ports'],a:0,exp:'DHCPv6 Guard is a feature designed to ensure that rogue DHCPv6 servers are not able to hand out addresses to clients, redirect client traffic, or starve out the DHCPv6 server and cause a DoS attack. DHCPv6 Guard requires a policy to be configured in DHCP Guard configuration mode, and DHCPv6 Guard is enabled on an interface-by-interface basis.'},
+{t:'ro',tag:'Routing',q:'A PC has sent an RS message to an IPv6 router attached to the same network. Which two pieces of information will the router send to the client? (Choose two.)',o:['prefix length','subnet mask in dotted decimal notation','domain name','administrative distance','prefix','DNS server IP address'],m:true,ma:[0, 4],a:null,exp:'Router is part of the IPv6 all-routers group and received the RS message. It generates an RA containing the local network prefix and prefix length (e.g., 2001:db8:acad:1::/64)'},
+{t:'wl',tag:'Wireless',q:'While attending a conference, participants are using laptops for network connectivity. When a guest speaker attempts to connect to the network, the laptop fails to display any available wireless networks. The access point must be operating in which mode?',o:['mixed','passive','active','open'],a:2,exp:'Active is a mode used to configure an access point so that clients must know the SSID to connect to the access point. APs and wireless routers can operate in a mixed mode meaning that that multiple wireless standards are supported. Open is an authentication mode for an access point that has no impact on the listing of available wireless networks for a client. When an access point is configured in passive mode, the SSID is broadcast so that the name of wireless network will appear in the listing of available networks for clients.'},
+{t:'sw',tag:'Switching',q:'Which three components are combined to form a bridge ID?',o:['extended system ID','cost','IP address','bridge priority','MAC address','port ID'],m:true,ma:[0, 3, 4],a:null,exp:'The three components that are combined to form a bridge ID are bridge priority, extended system ID, and MAC address.'},
+{t:'wl',tag:'Wireless',q:'On a Cisco 3504 WLC Summary page (Advanced > Summary), which tab allows a network administrator to configure a particular WLAN with a WPA2 policy?',o:['SECURITY','WIRELESS','WLANs','MANAGEMENT'],a:2,exp:'On the Cisco 3504 WLC, the WLANs tab is used to configure WLAN-specific settings including security policies (WPA2), QoS profiles, and policy mappings. This is where you apply WPA2 encryption to a specific SSID.'},
+{t:'sw',tag:'Switching',q:'Which frame-forwarding method checks the entire frame for errors before forwarding it, ensuring invalid frames are never passed on?',o:['Cut-through','Store-and-forward','Fast-forward','Fragment-free'],a:1,exp:'Store-and-forward switching receives the entire frame and runs an FCS check before forwarding. This catches corrupt frames but adds latency. Cut-through starts forwarding after reading only the destination MAC, so it may pass corrupt frames.'},
+{t:'sw',tag:'Switching',q:'Which frame-forwarding method begins forwarding a frame immediately after reading the destination MAC address, before the full frame is received?',o:['Store-and-forward','Fragment-free','Cut-through','Error-free forwarding'],a:2,exp:'Cut-through (fast-forward) switching minimizes latency by starting to forward as soon as the 6-byte destination MAC is read. The tradeoff is that corrupt frames can be forwarded since no FCS check is performed.'},
+{t:'sw',tag:'Switching',q:'A switch interface shows a status of "down/down". What does this indicate?',o:['The interface has been administratively disabled.','There is a Layer 1 (physical) problem such as a cable fault.','There is a Layer 2 problem such as an encapsulation mismatch.','The interface is fully operational.'],a:1,exp:'"down/down" means both the physical layer (Line) and the data-link layer (Protocol) are down. This almost always indicates a Layer 1 issue: unplugged cable, failed SFP, or the connected device is powered off.'},
+{t:'sw',tag:'Switching',q:'A switch interface shows a status of "up/down". What does this indicate?',o:['There is a Layer 1 (physical) problem on the link.','The interface has been disabled with the shutdown command.','There is a Layer 2 problem, such as an encapsulation or keepalive mismatch.','The interface is fully operational and passing traffic.'],a:2,exp:'"up/down" means the physical signal is detected (Layer 1 OK) but the protocol is not functioning (Layer 2 failed). Common causes include encapsulation mismatch, missing keepalives, or mismatched clock rates on serial links.'},
+{t:'vl',tag:'VLANs & Trunking',q:'Which VLAN type is assigned an IP address and subnet mask to allow the switch to be managed via HTTP, Telnet, SSH, or SNMP?',o:['Data VLAN','Native VLAN','Default VLAN','Management VLAN'],a:3,exp:'The management VLAN has an IP address configured on its SVI (Switch Virtual Interface), enabling remote management. By default VLAN 1 serves this role, but best practice is to use a separate dedicated management VLAN.'},
+{t:'vl',tag:'VLANs & Trunking',q:'Which VLAN type is configured to carry user-generated traffic on a network?',o:['Management VLAN','Native VLAN','Data VLAN','Default VLAN'],a:2,exp:'Data VLANs (user VLANs) carry end-user traffic such as PC data, email, and web browsing. Separating user traffic into data VLANs from management and voice VLANs improves security and simplifies QoS policy.'},
+{t:'sw',tag:'Switching',q:'After the boot loader loads from ROM, what is the next step in the Cisco switch boot sequence?',o:['Load the IOS from flash','Transfer control to the IOS','Initialize the flash file system','Initialize CPU registers'],a:3,exp:'The Cisco switch boot order is: POST → Boot Loader → CPU register initialization → Flash file system initialization → IOS load → Transfer control to IOS. CPU registers are initialized immediately after the boot loader.'},
+{t:'sw',tag:'Switching',q:'What is the LAST step in the Cisco switch boot sequence?',o:['Execute POST','Load the boot loader from ROM','Initialize the flash file system','Transfer control to the IOS'],a:3,exp:'After the IOS is loaded from flash memory, the final step is transferring control to the IOS. The IOS then processes the startup-config and begins normal switch operation including all configured protocols and interfaces.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'In the DHCPv4 process, what is the purpose of the DHCPOFFER message?',o:['A client uses it to locate any available DHCP server on the network.','A server uses it to suggest an available IP address lease to a client.','A client uses it to identify which DHCP server offer it accepts.','A server uses it to acknowledge that the lease has been accepted.'],a:1,exp:'DHCPOFFER is the server\'s unicast response to a DHCPDISCOVER broadcast. The server temporarily reserves an available IP and offers it with the subnet mask, lease duration, gateway, and DNS info. The client then sends a DHCPREQUEST to accept.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'What is the correct order of DHCPv4 messages during the address assignment process?',o:['OFFER → DISCOVER → REQUEST → ACK','DISCOVER → OFFER → REQUEST → ACK','DISCOVER → REQUEST → OFFER → ACK','REQUEST → DISCOVER → OFFER → ACK'],a:1,exp:'The DORA process: Discover (client broadcasts looking for servers), Offer (server proposes an address), Request (client broadcasts to accept the offer and notify other servers), Acknowledge (server confirms the lease is active).'},
+{t:'os',tag:'HSRP/FHRP',q:'What happens in Step 2 of the HSRP failover process after the active (forwarding) router fails?',o:['The standby router assumes the role of the forwarding router immediately.','The standby router sends a gratuitous ARP to all hosts.','The standby router stops receiving hello messages from the forwarding router.','The standby router increments its priority value.'],a:2,exp:'HSRP failover: Step 1 - forwarding router fails. Step 2 - standby router detects the failure by no longer receiving hello messages within the hold-down interval. Step 3 - standby assumes the active role using the virtual IP and MAC address.'},
+];
+
+const TINFO={
+  ro:{label:"Static Routes & Routing",color:"t-ro",target:8},
+  sw:{label:"Switching Concepts",color:"t-sw",target:8},
+  vl:{label:"VLANs & Trunking",color:"t-vl",target:11},
+  st:{label:"STP",color:"t-st",target:4},
+  ec:{label:"EtherChannel",color:"t-ec",target:3},
+  dh:{label:"DHCP & DHCPv6",color:"t-dh",target:6},
+  wl:{label:"Wireless / WLANs",color:"t-wl",target:8},
+  se:{label:"Port Security & L2 Sec",color:"t-se",target:4},
+  os:{label:"HSRP / FHRP",color:"t-os",target:3},
+};
+
+/* ── STATE ── */
+let testQs=[],userAns={},flagged=new Set(),currentQ=0,reviewOpen=false;
+let studyMode=true;
+let answered=new Set();
+let fsBump=0;
+let timerSecs=0,timerInterval=null;
+let partialScores={};
+
+document.getElementById('poolSize').textContent=POOL.length;
+
+/* ── DARK MODE ── */
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  document.getElementById('darkBtn').textContent=document.body.classList.contains('dark')?'☀️':'🌙';
+}
+
+/* ── FONT SIZE ── */
+function fontSize(d){
+  fsBump=Math.max(-3,Math.min(6,fsBump+d));
+  document.documentElement.style.setProperty('--fs-q',(15+fsBump)+'px');
+  document.documentElement.style.setProperty('--fs-opt',(14+fsBump)+'px');
+}
+
+/* ── MODE ── */
+const MODE_DESC={
+  study:'Answers and explanations shown immediately after each selection — great for learning.',
+  test:'All answers hidden until you submit — simulates the real exam.'
+};
+function setMode(m){
+  studyMode=(m==='study');
+  document.getElementById('modeStudyBtn').classList.toggle('active',studyMode);
+  document.getElementById('modeTestBtn').classList.toggle('active',!studyMode);
+  document.getElementById('modeDesc').textContent=MODE_DESC[m];
+}
+
+/* ── TIMER ── */
+function startTimer(){
+  timerSecs=0;
+  clearInterval(timerInterval);
+  timerInterval=setInterval(()=>{
+    timerSecs++;
+    const m=Math.floor(timerSecs/60),s=timerSecs%60;
+    const el=document.getElementById('timerDisplay');
+    el.textContent=m+':'+(s<10?'0':'')+s;
+    el.className='timer-display'+(timerSecs>4500?' danger':timerSecs>3600?' warn':'');
+  },1000);
+}
+function stopTimer(){clearInterval(timerInterval);}
+function formatTime(secs){const m=Math.floor(secs/60),s=secs%60;return m+'m '+(s<10?'0':'')+s+'s';}
+
+/* ── SHUFFLE ── */
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+/* ── START ── */
+function startTest(){
+  userAns={};flagged=new Set();answered=new Set();partialScores={};currentQ=0;testQs=[];
+  const byT={};POOL.forEach(q=>{if(!byT[q.t])byT[q.t]=[];byT[q.t].push(q);});
+  let sel=[];
+  Object.entries(TINFO).forEach(([t,info])=>{
+    const pool=shuffle(byT[t]||[]);
+    sel.push(...pool.slice(0,info.target));
+  });
+  const used=new Set(sel);
+  const rem=shuffle(POOL.filter(q=>!used.has(q)));
+  while(sel.length<55&&rem.length>0)sel.push(rem.shift());
+  testQs=shuffle(sel).slice(0,55);
+
+  const badge=document.getElementById('modeBadge');
+  badge.textContent=studyMode?'Study':'Test';
+  badge.className='mode-badge '+(studyMode?'study':'test');
+
+  document.getElementById('results-section').classList.add('hidden');
+  const ts=document.getElementById('test-section');
+  ts.classList.remove('hidden');
+  startTimer();
+  renderDots();renderQ();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    ts.scrollIntoView({behavior:'smooth',block:'start'});
+  }));
+}
+
+/* ── DOTS ── */
+function renderDots(){
+  const nav=document.getElementById('dotNav');nav.innerHTML='';
+  testQs.forEach((_,i)=>{
+    const b=document.createElement('button');
+    let cls='dot ';
+    if(i===currentQ) cls+='current';
+    else if(studyMode&&answered.has(i)){
+      const q=testQs[i];
+      if(q.m){
+        if(isCorrect(i)) cls+='correct-study';
+        else if(countHits(i)>0) cls+='partial-study';
+        else cls+='wrong-study';
+      } else {
+        cls+=isCorrect(i)?'correct-study':'wrong-study';
+      }
+    }
+    else if(flagged.has(i)) cls+='flagged';
+    else if(userAns[i]!==undefined){
+      cls+='answered';
+    }
+    else cls+='unanswered';
+    b.className=cls;b.textContent=i+1;b.onclick=()=>goTo(i);nav.appendChild(b);
+  });
+}
+
+/* ── PARTIAL SCORE ── */
+function calcPartial(qi){
+  const q=testQs[qi];const ua=userAns[qi];
+  if(!q.m||!(ua instanceof Set)) return ua===q.a?1:0;
+  const correct=new Set(q.ma);
+  if(ua.size!==correct.size) return 0;
+  for(const v of correct) if(!ua.has(v)) return 0;
+  return 1;
+}
+function countHits(qi){
+  const q=testQs[qi];const ua=userAns[qi];
+  if(!q.m||!(ua instanceof Set)) return 0;
+  const correct=new Set(q.ma);
+  let h=0; ua.forEach(v=>{if(correct.has(v))h++;});
+  return h;
+}
+
+/* ── IS CORRECT ── */
+function isCorrect(qi){
+  const q=testQs[qi];const ua=userAns[qi];
+  if(ua===undefined)return false;
+  if(q.m){const c=new Set(q.ma);if(!(ua instanceof Set)||ua.size!==c.size)return false;for(const v of c)if(!ua.has(v))return false;return true;}
+  return ua===q.a;
+}
+
+/* ── RENDER QUESTION ── */
+function renderQ(){
+  const q=testQs[currentQ];
+  const total=testQs.length;
+  document.getElementById('qcountLabel').textContent=`Q ${currentQ+1} of ${total}`;
+  document.getElementById('progFill').style.width=`${((currentQ+1)/total)*100}%`;
+  document.getElementById('answeredLabel').textContent=`${Object.keys(userAns).length} answered`;
+
+  const tInfo=TINFO[q.t]||{label:q.tag,color:'t-sw'};
+  const isM=!!q.m;
+  const ua=userAns[currentQ];
+  const revealed=studyMode&&answered.has(currentQ);
+  const partial=revealed&&isM?calcPartial(currentQ):null;
+
+  const ex=q.e?`<div class="exhibit">${q.e.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`:'';
+  const imgHtml=q.img?`<div class="q-img"><img src="${q.img}" alt="Exhibit" loading="lazy" onclick="openLightbox(this)" onerror="this.parentNode.style.display='none'" title="Click to enlarge"></div>`:'';
+  const mn=isM?`<div class="multi-note">⚠️ Select ALL ${q.ma.length} correct answers.</div>`:'';
+
+  let opts='';
+  q.o.forEach((opt,i)=>{
+    const itype=isM?'checkbox':'radio';
+    const ck=isM?(ua instanceof Set&&ua.has(i)):(ua===i);
+    let extraCls='';
+    if(revealed){
+      const isCA=isM?q.ma.includes(i):(i===q.a);
+      const userPicked=isM?(ua instanceof Set&&ua.has(i)):(ua===i);
+      if(isCA&&userPicked) extraCls=' opt-correct';
+      else if(isCA&&!userPicked) extraCls=' opt-missed';
+      else if(userPicked&&!isCA) extraCls=' opt-wrong';
+    }
+    const locked=revealed?' locked':'';
+    const clickFn=revealed?'':'selOpt('+i+')';
+    opts+=`<div class="opt${ck?' selected':''}${extraCls}${locked}" onclick="${clickFn}">` +
+      `<input type="${itype}" ${ck?'checked':''} onclick="event.stopPropagation();${clickFn}">` +
+      `<label><span class="opt-letter">${'ABCDEF'[i]}. </span>${opt}</label></div>`;
+  });
+
+  // feedback + explanation
+  let feedbackHtml='';
+  if(revealed){
+    const ok=isCorrect(currentQ);
+    let fbClass,fbMsg;
+    if(isM&&!ok&&countHits(currentQ)>0){
+      fbClass='partial';
+      fbMsg='⚡ Not quite — you got some right, but this is all-or-nothing. Correct answers shown in green.';
+    } else if(ok){
+      fbClass='correct';fbMsg='✅ Correct!';
+    } else {
+      fbClass='wrong';fbMsg='❌ Incorrect — correct answers highlighted in green.';
+    }
+    const expHtml=q.exp?`<div class="exp-text">💡 ${q.exp}</div>`:'';
+    feedbackHtml=`<div class="study-feedback ${fbClass} show">${fbMsg}${expHtml}</div>`;
+  }
+
+  // nav buttons
+  const isFirst=currentQ===0;
+  const isLast=currentQ===total-1;
+  const prevBtn=isFirst?'':`<button class="btn-prev" onclick="goTo(${currentQ-1})">← Prev</button>`;
+
+  let fwdBtn;
+  if(studyMode){
+    if(!revealed){
+      fwdBtn=`<button class="btn-check" id="checkBtn" onclick="checkStudy()" ${ua===undefined?'disabled':''}>Check ✓</button>`;
+    } else if(isLast){
+      fwdBtn=`<button class="btn-submit" onclick="confirmSubmit()">Finish &amp; Score 🎯</button>`;
+    } else {
+      fwdBtn=`<button class="btn-next" onclick="goTo(${currentQ+1})">Next →</button>`;
+    }
+  } else {
+    if(isLast){
+      fwdBtn=`<button class="btn-submit" onclick="confirmSubmit()">Submit &amp; Score 🎯</button>`;
+    } else {
+      fwdBtn=`<button class="btn-next" onclick="goTo(${currentQ+1})">Next →</button>`;
+    }
+  }
+
+  const cardNav=`<div class="card-nav">${prevBtn}${fwdBtn}</div>`;
+  const flagBtnHtml=`<div class="flag-row"><button class="flag-btn${flagged.has(currentQ)?' flagged':''}" onclick="toggleFlag()">${flagged.has(currentQ)?'🚩 Flagged':'⚑ Flag'}</button></div>`;
+
+  document.getElementById('questionArea').innerHTML=
+    `<div class="q-card">` +
+    `<div class="q-header"><span class="q-num">Q${currentQ+1}</span><span class="topic-tag ${tInfo.color}">${q.tag}</span></div>` +
+    `<div class="q-text">${q.q}</div>` +
+    imgHtml+ex+mn+
+    `<div class="options">${opts}</div>`+
+    feedbackHtml+flagBtnHtml+cardNav+
+    `</div>`;
+}
+
+/* ── STUDY CHECK ── */
+function checkStudy(){
+  if(userAns[currentQ]===undefined)return;
+  const q=testQs[currentQ];
+  if(q.m){partialScores[currentQ]=calcPartial(currentQ);}
+  answered.add(currentQ);
+  renderDots();renderQ();
+}
+
+/* ── SELECT OPT ── */
+function selOpt(i){
+  if(studyMode&&answered.has(currentQ))return;
+  const q=testQs[currentQ];
+  if(q.m){
+    let s=userAns[currentQ] instanceof Set?userAns[currentQ]:new Set();
+    if(s.has(i))s.delete(i);else s.add(i);
+    if(s.size===0)delete userAns[currentQ];else userAns[currentQ]=s;
+  } else {
+    userAns[currentQ]=i;
+  }
+  renderQ();renderDots();
+}
+
+function toggleFlag(){if(flagged.has(currentQ))flagged.delete(currentQ);else flagged.add(currentQ);renderQ();renderDots();}
+
+function goTo(n){
+  if(n<0||n>=testQs.length)return;
+  currentQ=n;renderDots();renderQ();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.getElementById('test-section').scrollIntoView({behavior:'smooth',block:'start'});
+  }));
+}
+
+/* ── MODAL ── */
+let modalCallback=null;
+function showModal(title,msg,listItems,confirmLabel,confirmDanger,cb){
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalMsg').textContent=msg;
+  const ml=document.getElementById('modalList');
+  if(listItems&&listItems.length){
+    ml.style.display='block';
+    ml.innerHTML=listItems.map(x=>`<li>${x}</li>`).join('');
+  } else {ml.style.display='none';}
+  const btn=document.getElementById('modalConfirm');
+  btn.textContent=confirmLabel;
+  btn.className='modal-btn-confirm'+(confirmDanger?' danger':'');
+  modalCallback=cb;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');modalCallback=null;}
+function confirmModal(){const cb=modalCallback;closeModal();if(cb)cb();}
+document.getElementById('modalConfirm').onclick=confirmModal;
+
+/* ── CONFIRM SUBMIT ── */
+function confirmSubmit(){
+  const unanswered=[];
+  testQs.forEach((_,i)=>{
+    if(userAns[i]===undefined) unanswered.push(`Q${i+1}`);
+  });
+  if(unanswered.length>0){
+    showModal(
+      '⚠️ Unanswered Questions',
+      `You have ${unanswered.length} unanswered question${unanswered.length>1?'s':''}. You can go back and answer them, or submit now.`,
+      unanswered,
+      'Submit Anyway',false,
+      ()=>finishTest()
+    );
+  } else {
+    finishTest();
+  }
+}
+
+/* ── CONFIRM END EARLY ── */
+function confirmEndEarly(){
+  const answered_count=Object.keys(userAns).length;
+  const total=testQs.length;
+  showModal(
+    '🏁 End Test Early?',
+    `You've answered ${answered_count} of ${total} questions. Your score will be calculated based on all ${total} questions — unanswered ones count as wrong.`,
+    null,
+    'End & Score',true,
+    ()=>finishTest()
+  );
+}
+
+/* ── FINISH TEST ── */
+function finishTest(){
+  stopTimer();
+  const elapsed=timerSecs;
+
+  // compute score with partial credit
+  let totalScore=0;
+  testQs.forEach((q,i)=>{
+    if(q.m){
+      totalScore+=calcPartial(i);
+    } else {
+      if(isCorrect(i))totalScore+=1;
+    }
+  });
+  const pct=Math.round((totalScore/testQs.length)*100);
+  const passed=pct>=70;
+
+  const sc=document.getElementById('scoreCard');
+  sc.className='score-card '+(passed?'pass':'fail');
+  document.getElementById('scorePct').textContent=pct+'%';
+  document.getElementById('scoreLabel').textContent=`${totalScore} / ${testQs.length} pts`;
+  document.getElementById('scoreSub').textContent=passed?'✅ PASSING — above 70%!':'❌ Below 70% — keep studying!';
+  document.getElementById('scoreTime').textContent=`⏱ Time: ${formatTime(elapsed)}`;
+
+  // topic breakdown
+  const ts={};
+  testQs.forEach((q,i)=>{
+    if(!ts[q.t])ts[q.t]={score:0,n:0,label:TINFO[q.t]?.label||q.t};
+    ts[q.t].n++;
+    if(q.m) ts[q.t].score+=calcPartial(i);
+    else if(isCorrect(i)) ts[q.t].score+=1;
+  });
+  let tbh='';
+  Object.values(ts).sort((a,b)=>b.n-a.n).forEach(s=>{
+    const p=s.n?Math.round((s.score/s.n)*100):0;
+    const cl=p>=70?'good':p>=50?'ok':'bad';
+    const col=p>=70?'#16a34a':p>=50?'#d97706':'#dc2626';
+    tbh+=`<div class="tb-row"><div class="tb-label"><span class="tb-name">${s.label}</span><span style="color:${col};font-weight:600">${s.score}/${s.n} (${p}%)</span></div><div class="tb-bar"><div class="tb-fill ${cl}" style="width:${p}%"></div></div></div>`;
+  });
+  document.getElementById('topicBreakdown').innerHTML=tbh;
+
+  // full review
+  let revh='';
+  testQs.forEach((q,i)=>{
+    const ua=userAns[i];const sk=ua===undefined;
+    const ps=q.m?calcPartial(i):null;
+    const ok=isCorrect(i);
+    let scl,icon;
+    if(sk){scl='skipped';icon='⏭️ Skipped';}
+    else if(ok){scl='correct';icon='✅ Correct';}
+    else if(q.m&&countHits(i)>0){scl='partial';icon='⚡ Partial (0 pts)';}
+    else{scl='wrong';icon='❌ Wrong';}
+    const tInfo=TINFO[q.t]||{label:q.tag,color:'t-sw'};
+    const ex=q.e?`<div class="rev-exhibit">${q.e.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`:'';
+    const rimgHtml=q.img?`<div style="text-align:center;padding:6px 0"><img src="${q.img}" alt="Exhibit" loading="lazy" onclick="openLightbox(this)" style="max-width:100%;border-radius:6px;border:1px solid var(--border);cursor:zoom-in" onerror="this.parentNode.style.display='none'"></div>`:'';
+    let opts='';
+    q.o.forEach((opt,oi)=>{
+      const isCA=q.m?q.ma.includes(oi):oi===q.a;
+      const up=q.m?(ua instanceof Set&&ua.has(oi)):(ua===oi);
+      let cl='rev-opt neutral';let pf='';
+      if(isCA&&up){cl='rev-opt correct-ans';pf='✓ ';}
+      else if(isCA&&!up){cl='rev-opt correct-ans';pf='→ ';}
+      else if(up&&!isCA){cl='rev-opt user-wrong';pf='✗ ';}
+      opts+=`<div class="${cl}">${pf}${'ABCDEF'[oi]}. ${opt}</div>`;
+    });
+    const expHtml=q.exp?`<div class="rev-exp"><strong>Explanation</strong><br>${q.exp}</div>`:'';
+    revh+=`<div class="rev-q"><div class="rev-status ${scl}">${icon} <span class="topic-tag ${tInfo.color}" style="font-size:10px">${q.tag}</span> Q${i+1}</div><div class="rev-q-text">${q.q}</div>${rimgHtml}${ex}${opts}${expHtml}</div>`;
+  });
+  document.getElementById('reviewBody').innerHTML=revh;
+  document.getElementById('test-section').classList.add('hidden');
+  document.getElementById('results-section').classList.remove('hidden');
+  document.getElementById('results-section').scrollIntoView({behavior:'smooth'});
+}
+
+function submitTest(){confirmSubmit();}
+function retakeTest(){startTest();}
+function toggleReview(){
+  reviewOpen=!reviewOpen;
+  document.getElementById('reviewBody').style.display=reviewOpen?'block':'none';
+  document.getElementById('toggleIcon').style.transform=reviewOpen?'rotate(180deg)':'';
+}
+
+/* ── LIGHTBOX ── */
+function openLightbox(img){
+  document.getElementById('lightbox-img').src=img.src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeLightbox();closeModal();}});
+</script>
+</body>
+</html>
