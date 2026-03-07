@@ -137,7 +137,7 @@ body{
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .splash-card .sub{color:var(--text-muted);font-size:13px;margin-bottom:22px;}
-.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:22px;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px;}
 .stat-box{
   background:var(--bg-opt);border:1px solid var(--border);border-radius:12px;padding:14px 8px;
   transition:border-color .2s;
@@ -180,6 +180,10 @@ body{
   transform:translateY(-1px);
 }
 .btn-start:active{transform:translateY(0) scale(.98);}
+.all-seen-notice{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--text-muted);text-align:center;margin-bottom:14px;line-height:1.5;}
+.reset-seen-btn{display:inline-block;margin-top:8px;padding:5px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:6px;color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;transition:background .2s;}
+.reset-seen-btn:hover{background:rgba(59,130,246,.2);}
+.seen-badge{display:inline-block;margin-left:10px;padding:2px 9px;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);border-radius:20px;font-size:11px;color:var(--blue);font-weight:600;vertical-align:middle;}
 
 /* ── QUESTION COUNT STEPPER ── */
 .q-count-row{display:flex;align-items:center;justify-content:space-between;
@@ -680,7 +684,12 @@ body{
     <div class="stats-grid">
       <div class="stat-box"><div class="num" id="poolSize">169</div><div class="lbl">Question Pool</div></div>
       <div class="stat-box"><div class="num" id="statPerTest">55</div><div class="lbl">Per Test</div></div>
+      <div class="stat-box"><div class="num" id="statSeen">0</div><div class="lbl">Seen So Far</div></div>
       <div class="stat-box"><div class="num">70%</div><div class="lbl">Pass Score</div></div>
+    </div>
+    <div id="allSeenNotice" class="all-seen-notice hidden">
+      🎉 You've seen all questions at least once! Tests will repeat some, but always prioritize unseen ones first.
+      <button class="reset-seen-btn" onclick="resetSeenQs()">Reset Progress</button>
     </div>
     <div class="mode-toggle">
       <button class="mode-btn active" id="modeStudyBtn" onclick="setMode('study')">📖 Study Mode</button>
@@ -769,7 +778,7 @@ const POOL=[
 {t:'sw',tag:'Switching',q:'What is a secure configuration option for remote access to a network device?',o:['Configure an ACL and apply it to the VTY lines.','Configure 802.1x.','Configure SSH.','Configure Telnet.'],a:2,exp:'SSH (Secure Shell) encrypts the entire management session, protecting credentials and commands. Telnet sends everything in plain text and should never be used for remote device management.'},
 {t:'wl',tag:'Wireless',q:'Which wireless encryption method is the most secure?',o:['WPA2 with AES','WPA2 with TKIP','WEP','WPA'],a:0,exp:'WPA2 with AES (Advanced Encryption Standard) uses CCMP encryption and provides the strongest security for Wi-Fi. WEP is broken, WPA uses the weaker TKIP cipher, and WPA2-TKIP is less secure than WPA2-AES.'},
 {t:'wl',tag:'Wireless',q:'After attaching four PCs to the switch ports, configuring the SSID and setting authentication properties for a small office network, a technician successfully tests the connectivity of all PCs that are connected to the switch and WLAN. A firewall is then configured on the device prior to connecting it to the Internet. What type of network device includes all of the described features?',o:['firewall appliance','wireless router','switch','standalone wireless access point'],a:1,exp:'A wireless router combines a switch (for wired PCs), a wireless access point (for WLAN/SSID), a DHCP server, and a firewall/NAT into a single consumer device — making it the correct answer for this multi-function scenario.'},
-{t:'sw',tag:'Switching',q:'Host A has sent a packet to host B. What will be the source MAC and IP addresses on the packet when it arrives at host B?',o:['Source MAC: 00E0.FE91.7799 Source IP: 10.1.1.10','Source MAC: 00E0.FE10.17A3 Source IP: 10.1.1.10','Source MAC: 00E0.FE10.17A3 Source IP: 192.168.1.1','Source MAC: 00E0.FE91.7799 Source IP: 10.1.1.1','Source MAC: 00E0.FE91.7799 Source IP: 192.168.1.1'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2016/02/p39-prac-final-ccna2.jpg',exp:'As a packet traverses the network, the Layer 2 addresses will change at every hop as the packet is de-encapsulated and re-encapsulated, but the Layer 3 addresses will remain the same.'},
+{t:'sw',tag:'Switching',q:'Host A has sent a packet to host B. What will be the source MAC and IP addresses on the packet when it arrives at host B?',o:['Source MAC: 00E0.FE91.7799 / Source IP: 10.1.1.10','Source MAC: 00E0.FE10.17A3 / Source IP: 10.1.1.10','Source MAC: 00E0.FE10.17A3 / Source IP: 192.168.1.1','Source MAC: 00E0.FE91.7799 / Source IP: 10.1.1.1','Source MAC: 00E0.FE91.7799 / Source IP: 192.168.1.1'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2016/02/p39-prac-final-ccna2.jpg',exp:'As a packet traverses the network, the Layer 2 addresses will change at every hop as the packet is de-encapsulated and re-encapsulated, but the Layer 3 addresses will remain the same.'},
 {t:'ro',tag:'Routing',q:'In addition to static routes directing traffic to networks 10.10.0.0/16 and 10.20.0.0/16, Router HQ is also configured with the following command. What is the purpose of this command?',e:'ip route 0.0.0.0 0.0.0.0 serial 0\/1\/1',o:['Packets that are received from the Internet will be forwarded to one of the LANs connected to R1 or R2.','Packets with a destination network that is not 10.10.0.0/16 or is not 10.20.0.0/16 or is not a directly connected network will be forwarded to the Internet.','Packets from the 10.10.0.0/16 network will be forwarded to network 10.20.0.0/16, and packets from the 10.20.0.0/16 network will be forwarded to network 10.10.0.0/16.','Packets that are destined for networks that are not in the routing table of HQ will be dropped.'],a:1,img:'https://itexamanswers.net/wp-content/uploads/2020/01/2020-01-31_203919-768x465-1.png',exp:'The command ip route 0.0.0.0 0.0.0.0 serial 0/1/1 is a default static route. It matches any destination not found in the routing table and forwards those packets out Serial 0/1/1 toward the Internet.'},
 {t:'vl',tag:'VLANs & Trunking',q:'What protocol or technology disables redundant paths to eliminate Layer 2 loops?',o:['VTP','STP','EtherChannel','DTP'],a:1,exp:'Spanning Tree Protocol (STP) prevents Layer 2 loops by placing redundant switch ports into a blocking state. Without STP, broadcast storms would bring a switched network down instantly.'},
 {t:'vl',tag:'VLANs & Trunking',q:'Based on the exhibited configuration and output, why is VLAN 99 missing?',o:['because VLAN 99 is not a valid management VLAN','because there is a cabling problem on VLAN 99','because VLAN 1 is up and there can only be one management VLAN on the switch','because VLAN 99 has not yet been created'],a:3,img:'https://itexamanswers.net/wp-content/uploads/2020/01/rx4-768x474-1.png',exp:'An interface configured with \'switchport access vlan 99\' will not come up if VLAN 99 does not exist in the VLAN database. VLANs must be created with the \'vlan 99\' command before they can be used.'},
@@ -803,7 +812,8 @@ const POOL=[
 {t:'sw',tag:'Switching',q:'What is the metric to forward a data packet with the IPv6 destination address 2001:DB8:ACAD:E:240:BFF:FED4:9DD2?',o:['90','128','2170112','2681856','2682112','3193856'],a:4,img:'https://itexamanswers.net/wp-content/uploads/2020/01/CCNA-2-v7-exam-answers.png',exp:'The IPv6 destination address 2001:DB8:ACAD:E:240:BFF:FED4:9DD2 belongs to the network of 2001:DB8:ACAD:E::/64. In the routing table, the route to forward the packet has Serial 0/0/1 as an exit interface and 2682112 as the cost.'},
 {t:'vl',tag:'VLANs & Trunking',q:'A network administrator is configuring a new Cisco switch for remote management access. Which three items must be configured on the switch for the task? (Choose three.)',o:['IP address','VTP domain','vty lines','default VLAN','default gateway','loopback address'],m:true,ma:[0, 2, 4],a:null,exp:'To enable the remote management access, the Cisco switch must be configured with an IP address and a default gateway. In addition, vty lines must configured to enable either Telnet or SSH connections. A loopback address, default VLAN, and VTP domain configurations are not necessary for the purpose of remote switch management.'},
 {t:'ro',tag:'Routing',q:'Which statement shown in the output allows router R1 to respond to stateless DHCPv6 requests?',o:['ipv6 nd other-config-flag​','prefix-delegation 2001:DB8:8::/48 00030001000E84244E70​','ipv6 dhcp server LAN1​','ipv6 unicast-routing','dns-server 2001:DB8:8::8​'],a:0,img:'https://itexamanswers.net/wp-content/uploads/2020/01/CCNA-2-v7-exam-answers-56.png',exp:'The interface command ipv6 nd other-config-flag allows RA messages to be sent on this interface, indicating that additional information is available from a stateless DHCPv6 server.'},
-{t:'vl',tag:'VLANs & Trunking',q:'A Layer 3 switch routes for three VLANs and connects to a router for Internet connectivity. Which two configurations would be applied to the switch? (Choose two.)',o:['Configure the 5 GHz band for streaming multimedia and time sensitive traffic.','Configure the security mode to WPA Personal TKIP/AES for one network and WPA2 Personal AES for the other network','Configure the 2.4 GHz band for basic internet traffic that is not time sensitive.','Configure the security mode to WPA Personal TKIP/AES for both networks.','Configure a common SSID for both split networks.'],m:true,ma:[0, 2],a:null,img:'https://itexamanswers.net/wp-content/uploads/2020/01/CCNA-2-v7-exam-answers-57.png',exp:'A Layer 3 switch connecting to a router needs a routed port (\'no switchport\') with an IP address for the uplink. IP routing must also be enabled globally so the switch can route between VLANs using its SVI interfaces.'},
+{t:'vl',tag:'VLANs & Trunking',q:'A Layer 3 switch routes for three VLANs and connects to a router for Internet connectivity. Which two configurations would be applied to the switch? (Choose two.)',o:['(config)# interface gigabitethernet1/1\n(config-if)# switchport mode trunk','(config)# interface gigabitethernet 1/1\n(config-if)# no switchport\n(config-if)# ip address 192.168.1.2 255.255.255.252','(config)# interface vlan 1\n(config-if)# ip address 192.168.1.2 255.255.255.0\n(config-if)# no shutdown','(config)# ip routing','(config)# interface fastethernet0/4\n(config-if)# switchport mode trunk'],m:true,ma:[1,3],a:null,img:'https://itexamanswers.net/wp-content/uploads/2020/01/CCNA-2-v7-exam-answers-57.png',exp:'A Layer 3 switch connecting to a router for Internet access needs two things: the uplink port must be converted to a routed port using "no switchport" and assigned an IP address, and "ip routing" must be enabled globally so the switch can route between VLANs.'},
+{t:'wl',tag:'Wireless',q:'A technician is troubleshooting a slow WLAN and decides to use the split-the-traffic approach. Which two parameters would have to be configured to do this? (Choose two.)',o:['Configure the 5 GHz band for streaming multimedia and time sensitive traffic.','Configure the security mode to WPA Personal TKIP/AES for one network and WPA2 Personal AES for the other network.','Configure the 2.4 GHz band for basic internet traffic that is not time sensitive.','Configure the security mode to WPA Personal TKIP/AES for both networks.','Configure a common SSID for both split networks.'],m:true,ma:[0,2],a:null,img:null,exp:'The split-the-traffic approach uses two frequency bands: the 5 GHz band handles high-bandwidth, time-sensitive traffic like streaming multimedia, while the 2.4 GHz band handles basic internet traffic that is not time sensitive.'},
 {t:'ro',tag:'Routing',q:'A company has just switched to a new ISP. The ISP has completed and checked the connection from its site to the company. However, employees at the company are not able to access the internet. What should be done or checked?',o:['Verify that the static route to the server is present in the routing table.','Check the configuration on the floating static route and adjust the AD.','Ensure that the old default route has been removed from the company edge routers.','Create a floating static route to that network.'],a:2,exp:'When switching ISPs, the old default route on the edge router still points to the previous ISP\'s next-hop, which is no longer reachable. Removing the old default route allows the new ISP route to take effect.'},
 {t:'sw',tag:'Switching',q:'Which information does a switch use to populate the MAC address table?',o:['the destination MAC address and the incoming port','the destination MAC address and the outgoing port','the source and destination MAC addresses and the incoming port','the source and destination MAC addresses and the outgoing port','the source MAC address and the incoming port','the source MAC address and the outgoing port'],a:4,exp:'To maintain the MAC address table, the switch uses the source MAC address of the incoming packets and the port that the packets enter. The destination address is used to select the outgoing port.'},
 {t:'vl',tag:'VLANs & Trunking',q:'A network administrator is reviewing the configuration of switch S1. Which protocol has been implemented to group multiple physical ports into one logical link?',o:['PAgP','DTP','LACP','STP'],a:0,exp:'The EtherChannel protocol PAgP provides the grouping of physical interfaces and utilizes the modes of auto and desirable. The EtherChannel protocol LACP provides the grouping of physical interfaces and utilizes the modes of passive and active. DTP and STP are not utilized to group multiple physical interfaces into a single logical link.',img:'https://itexamanswers.net/wp-content/uploads/2017/03/p23-1.png'},
@@ -894,7 +904,7 @@ const POOL=[
 {t:'wl',tag:'Wireless',q:'A network administrator is configuring a WLAN. Why would the administrator apply WPA2 with AES to the WLAN?',o:['to reduce the risk of unauthorized APs being added to the network','to centralize management of multiple WLANs','to provide prioritized service for time-sensitive applications','to provide privacy and integrity to wireless traffic by using encryption'],a:3,exp:'WPA2 with AES uses CCMP (Counter Mode with CBC-MAC Protocol) encryption, providing strong data confidentiality, integrity, and authentication for wireless traffic. It is the recommended standard for securing production WLANs.'},
 {t:'ro',tag:'Routing',q:'Users on a LAN are unable to get to a company web server but are able to get elsewhere. What should be done or checked?',o:['Ensure that the old default route has been removed from the company edge routers.','Verify that the static route to the server is present in the routing table.','Check the configuration on the floating static route and adjust the AD.','Create a floating static route to that network.'],a:1,exp:'When users can reach some network resources but not a specific server, the most likely cause is a missing static route to that server\'s subnet. The routing table should have an explicit route for the server\'s network.'},
 {t:'dh',tag:'DHCP/DHCPv6',q:'What IPv6 prefix is designed for link-local communication?',o:['2001::/3','ff00::/8','fc::/07','fe80::/10'],a:3,exp:'The fe80::/10 prefix is reserved for IPv6 link-local addresses. These addresses are automatically configured on every IPv6-enabled interface and are only valid on the local link — they cannot be routed beyond a single network segment.'},
-{t:'dh',tag:'DHCP/DHCPv6',q:'What is the effect of entering the ip dhcp snooping limit rate 6 configuration command on a switch?',o:['It displays the IP-to-MAC address associations for switch interfaces.','It enables port security globally on the switch.','It restricts the number of discovery messages, per second, to be received on the interface.','It dynamically learns the L2 address and copies it to the running configuration.'],a:2,exp:'\'ip dhcp snooping limit rate 6\' restricts the number of DHCP messages processed per second on an interface to 6. This rate limiting prevents DHCP starvation attacks that flood the switch with DHCP Discover messages.'},
+{t:'dh',tag:'DHCP/DHCPv6',q:'What is the effect of entering theip dhcp snooping limit rate 6configuration command on a switch?',o:['It displays the IP-to-MAC address associations for switch interfaces.','It enables port security globally on the switch.','It restricts the number of discovery messages, per second, to be received on the interface.','It dynamically learns the L2 address and copies it to the running configuration.'],a:2,exp:'\'ip dhcp snooping limit rate 6\' restricts the number of DHCP messages processed per second on an interface to 6. This rate limiting prevents DHCP starvation attacks that flood the switch with DHCP Discover messages.'},
 {t:'wl',tag:'Wireless',q:'A network administrator is configuring a WLAN. Why would the administrator change the default DHCP IPv4 addresses on an AP?',o:['to eliminate outsiders scanning for available SSIDs in the area','to reduce the risk of unauthorized APs being added to the network','to reduce outsiders intercepting data or accessing the wireless network by using a well-known address range','to reduce the risk of interference by external devices such as microwave ovens'],a:2,exp:'The default DHCP address range on most APs (e.g., 192.168.1.0/24) is widely known. Changing it to a non-default range makes it harder for unauthorized users who associate with the AP to know the correct address space.'},
 {t:'vl',tag:'VLANs & Trunking',q:'What is the effect of entering the ip arp inspection validate src-mac configuration command on a switch?',o:['It checks the source L2 address in the Ethernet header against the sender L2 address in the ARP body.','It disables all trunk ports.','It displays the IP-to-MAC address associations for switch interfaces.','It enables portfast on a specific switch interface.'],a:0,exp:'\'ip arp inspection validate src-mac\' adds an extra DAI check that compares the source MAC address in the Ethernet frame header against the sender MAC address in the ARP message body. Mismatches indicate ARP spoofing.'},
 {t:'vl',tag:'VLANs & Trunking',q:'What protocol or technology is a Cisco proprietary protocol that is automatically enabled on 2960 switches?',o:['DTP','STP','VTP','EtherChannel'],a:0,exp:'DTP (Dynamic Trunking Protocol) is Cisco-proprietary and enabled by default on Cisco Catalyst switches including the 2960 series. It automatically negotiates trunk links between Cisco switches without manual configuration.'},
@@ -947,8 +957,37 @@ let answered=new Set();
 let fsBump=0;
 let timerSecs=0,timerInterval=null;
 let partialScores={};
+let seenQSet=new Set();
+
+/* ── SEEN QUESTIONS (localStorage) ── */
+function loadSeenQs(){
+  try{
+    const raw=localStorage.getItem('srweprep_seen');
+    if(raw){const arr=JSON.parse(raw);arr.forEach(q=>seenQSet.add(q));}
+  }catch(e){seenQSet=new Set();}
+  updateSeenUI();
+}
+function saveSeenQs(qs){
+  qs.forEach(q=>seenQSet.add(q.q));
+  try{localStorage.setItem('srweprep_seen',JSON.stringify([...seenQSet]));}catch(e){}
+  updateSeenUI();
+}
+function resetSeenQs(){
+  seenQSet=new Set();
+  try{localStorage.removeItem('srweprep_seen');}catch(e){}
+  updateSeenUI();
+}
+function updateSeenUI(){
+  const totalUnique=[...new Set(POOL.map(q=>q.q))].length;
+  const seenCount=seenQSet.size;
+  const el=document.getElementById('statSeen');
+  if(el) el.textContent=seenCount;
+  const notice=document.getElementById('allSeenNotice');
+  if(notice) notice.classList.toggle('hidden', seenCount<totalUnique);
+}
 
 document.getElementById('poolSize').textContent=[...new Set(POOL.map(q=>q.q))].length;
+loadSeenQs();
 
 /* ── DARK MODE ── */
 function toggleDark(){
@@ -1033,16 +1072,32 @@ function startTest(){
   // Deduplicate pool by question text (safety net against duplicate entries)
   const seenQ=new Set();
   const dedupedPool=POOL.filter(q=>{if(seenQ.has(q.q))return false;seenQ.add(q.q);return true;});
-  const byT={};dedupedPool.forEach(q=>{if(!byT[q.t])byT[q.t]=[];byT[q.t].push(q);});
+
+  // Split into unseen and previously-seen buckets
+  const unseenPool=dedupedPool.filter(q=>!seenQSet.has(q.q));
+  const prevSeenPool=dedupedPool.filter(q=>seenQSet.has(q.q));
+
+  // Build topic buckets for unseen first, seen as fallback
+  const unseenByT={};unseenPool.forEach(q=>{if(!unseenByT[q.t])unseenByT[q.t]=[];unseenByT[q.t].push(q);});
+  const seenByT={};prevSeenPool.forEach(q=>{if(!seenByT[q.t])seenByT[q.t]=[];seenByT[q.t].push(q);});
+
   let sel=[];
+  const usedSet=new Set();
   Object.entries(targets).forEach(([t,cnt])=>{
-    const pool=shuffle(byT[t]||[]);
-    sel.push(...pool.slice(0,cnt));
+    const unseen=shuffle(unseenByT[t]||[]);
+    const seen=shuffle(seenByT[t]||[]);
+    const combined=[...unseen,...seen]; // unseen first
+    combined.slice(0,cnt).forEach(q=>{if(!usedSet.has(q)){sel.push(q);usedSet.add(q);}});
   });
-  const used=new Set(sel);
-  const rem=shuffle(dedupedPool.filter(q=>!used.has(q)));
+
+  // Fill remaining slots — unseen first, then seen
+  const unseenRem=shuffle(unseenPool.filter(q=>!usedSet.has(q)));
+  const seenRem=shuffle(prevSeenPool.filter(q=>!usedSet.has(q)));
+  const rem=[...unseenRem,...seenRem];
   while(sel.length<n&&rem.length>0)sel.push(rem.shift());
   testQs=shuffle(sel).slice(0,n);
+
+  // Save these questions as seen only when test ends (in finishTest)
 
   const badge=document.getElementById('modeBadge');
   badge.textContent=studyMode?'Study':'Test';
@@ -1151,7 +1206,7 @@ function renderQ(){
     let fbClass,fbMsg;
     if(isM&&!ok&&countHits(currentQ)>0){
       fbClass='partial';
-      fbMsg='⚡ Not quite. Correct answers shown in green.';
+      fbMsg='⚡ Not quite — you got some right, but this is all-or-nothing. Correct answers shown in green.';
     } else if(ok){
       fbClass='correct';fbMsg='✅ Correct!';
     } else {
@@ -1198,7 +1253,7 @@ function renderQ(){
   document.getElementById('questionArea').innerHTML=
     `<div class="q-card ${cardFlashCls}">` +
     `<div class="q-card-scroll ${slideDir}">` +
-    `<div class="q-header"><span class="q-num">Q${currentQ+1}</span><span class="topic-tag ${tInfo.color}">${q.tag}</span></div>` +
+    `<div class="q-header"><span class="q-num">Q${currentQ+1}</span><span class="topic-tag ${tInfo.color}">${q.tag}</span>${seenQSet.has(q.q)?'<span class="seen-badge">👁 Seen before</span>':''}</div>` +
     `<div class="q-text">${q.q}</div>` +
     imgHtml+ex+mn+
     `<div class="options">${opts}</div>`+
@@ -1295,6 +1350,7 @@ function confirmEndEarly(){
 /* ── FINISH TEST ── */
 function finishTest(){
   stopTimer();
+  saveSeenQs(testQs); // mark all questions in this test as seen
   const elapsed=timerSecs;
 
   // compute score with partial credit
